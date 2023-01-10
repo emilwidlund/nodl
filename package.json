@@ -4,7 +4,7 @@
     "description": "A React-library for building node-based applications.",
     "main": "build/index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "jest"
     },
     "repository": {
         "type": "git",
@@ -27,9 +27,11 @@
     "devDependencies": {
         "@types/jest": "^29.2.5",
         "@types/react": "^18.0.26",
-        "jest": "^29.3.1"
+        "jest": "^29.3.1",
+        "ts-jest": "^29.0.3"
     },
     "peerDependencies": {
-        "react": "^18.2.0"
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
     }
 }

@@ -2,10 +2,11 @@ import { Disposable, Listener } from './Emitter.types';
 
 export class Emitter<T> {
     /** Registered Listeners */
-    private listeners: Listener<T>[] = [];
+    public listeners: Listener<T>[] = [];
     /** Temporary Listeners which will be disposed after first event */
-    private temporaryListeners: Listener<T>[] = [];
+    public temporaryListeners: Listener<T>[] = [];
 
+    /** Registers a listener */
     public on(listener: Listener<T>): Disposable {
         this.listeners.push(listener);
 
@@ -14,15 +15,20 @@ export class Emitter<T> {
         };
     }
 
+    /** Registers a temporary listener */
     public once(listener: Listener<T>): void {
         this.temporaryListeners.push(listener);
     }
 
+    /**
+     * Emits an event to all registered listeners.
+     * Temporary listeners are immediately disposed after event is dispatched.
+     */
     public emit(event: T) {
         /** Update any general listeners */
         this.listeners.forEach(listener => listener(event));
 
-        /** Clear the `once` queue */
+        /** Clear the `temporary` queue */
         if (this.temporaryListeners.length > 0) {
             const toCall = this.temporaryListeners;
 
@@ -32,13 +38,25 @@ export class Emitter<T> {
         }
     }
 
+    /** Pipes the emitter's events to a given emitter of the same type */
     public pipe(te: Emitter<T>): Disposable {
         return this.on(e => te.emit(e));
     }
 
-    public dispose(listener: Listener<T>) {
-        const callbackIndex = this.listeners.indexOf(listener);
+    /**
+     * Disposes the given listener.
+     * If no listener is provided, all listeners are disposed.
+     */
+    public dispose(listener?: Listener<T>) {
+        if (!listener) {
+            this.listeners = [];
+            this.temporaryListeners = [];
+        } else {
+            const callbackIndex = this.listeners.indexOf(listener);
+            const temporaryCallbackIndex = this.temporaryListeners.indexOf(listener);
 
-        if (callbackIndex > -1) this.listeners.splice(callbackIndex, 1);
+            if (callbackIndex > -1) this.listeners.splice(callbackIndex, 1);
+            if (temporaryCallbackIndex > -1) this.temporaryListeners.splice(temporaryCallbackIndex, 1);
+        }
     }
 }
