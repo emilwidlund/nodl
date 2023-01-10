@@ -1,0 +1,6 @@
+# Directories
+node_modules
+build
+
+# Files
+.DS_STORE
