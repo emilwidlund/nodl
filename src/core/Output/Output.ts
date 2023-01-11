@@ -1,45 +1,36 @@
-import { Type } from '@thi.ng/shader-ast';
-import { makeObservable, computed } from 'mobx';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { v4 as uuid } from 'uuid';
 
-import { Connection } from '../Connection/Connection';
 import { Input } from '../Input/Input';
-import { Node } from '../Node/Node';
-import { Port } from '../Port/Port';
-import { IOutputProps, OutputValue } from './Output.types';
+import { IOutputProps } from '../Output/Output.types';
 
-export class Output<TType extends Type, TNode extends Node = Node> extends Port<TType, TNode> {
-    /** Computed Value */
-    value!: OutputValue<TType>;
+export class Output<T> extends Subject<T> {
+    /** Identifier */
+    public id: string = uuid();
+    /** Name */
+    public name: string;
+    /** Type */
+    public type: string;
+    /** Compute operation */
+    public compute: Observable<T>;
+    /** Value Operator subscription */
+    public subscription: Subscription;
 
-    constructor(node: TNode, props: IOutputProps<TType>) {
-        super(node, props);
+    constructor(props: IOutputProps<T>) {
+        super();
 
-        Object.defineProperty(this, 'value', {
-            enumerable: true,
-            configurable: true,
-            get: props.value
-        });
-
-        makeObservable(this, {
-            value: computed,
-            connections: computed
-        });
+        this.name = props.name || 'Untitled';
+        this.type = props.type || 'Any';
+        this.compute = props.compute;
+        this.subscription = this.compute.subscribe(this);
     }
 
-    /** Connects output with input */
-    public connect<TInputNode extends Node, TInput extends Input<TType, TInputNode>>(input: TInput): Connection<TType> {
-        return this.node.context.connect(this, input);
+    public connect(input: Input<T>) {
+        this.subscription.unsubscribe();
+        this.subscription = this.subscribe(input);
     }
 
-    /** Outgoing Connections */
-    public get connections(): Connection<TType>[] {
-        return [...this.node.context.connections.values()].filter(connection => connection.from.id === this.id);
-    }
-
-    /** Disposes the Output */
     public dispose() {
-        for (const connection of this.connections) {
-            this.node.context.disconnect(connection);
-        }
+        this.subscription.unsubscribe();
     }
 }

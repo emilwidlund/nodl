@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "lib": ["es2021"],
+        "target": "ES6",
+        "module": "commonjs",
+        "strict": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "skipLibCheck": true,
+        "outDir": "build",
+        "declaration": true
+    },
+    "include": ["./src"],
+    "exclude": ["./src/**/*.spec.ts", "./src/**/*.test.ts"]
+}
