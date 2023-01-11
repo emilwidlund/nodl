@@ -1,24 +1,24 @@
-import { combineLatest, map } from 'rxjs';
+import { v4 as uuid } from 'uuid';
 
+import { Context } from '../Context/Context';
 import { Input } from '../Input/Input';
 import { Output } from '../Output/Output';
 
-export class Addition {
-    a: Input<number> = new Input({ name: 'A', type: 'Number', defaultValue: 0 });
-    b: Input<number> = new Input({ name: 'B', type: 'Number', defaultValue: 0 });
+export abstract class Node {
+    /** Identifier */
+    public id: string = uuid();
+    /** Node Name */
+    public name: string = this.constructor.name;
+    /** Associated Context */
+    public context: Context;
+    /** Node Inputs */
+    public inputs: Record<string, Input> = {};
+    /** Node Outputs */
+    public outputs: Record<string, Output> = {};
 
-    output: Output<number> = new Output({
-        name: 'Output',
-        type: 'Number',
-        compute: combineLatest([this.a, this.b]).pipe(map(inputs => inputs.reduce((sum, value) => sum + value), 0))
-    });
+    constructor(context: Context) {
+        this.context = context;
+
+        this.context.add(this);
+    }
 }
-
-const addition = new Addition();
-const addition2 = new Addition();
-
-addition2.output.subscribe(console.log);
-// addition.output.connect(addition2.a);
-
-addition2.b.next(500);
-// addition2.b.next(500);
