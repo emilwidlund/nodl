@@ -6,9 +6,11 @@ A library for node-based applications. Leveraged by RxJS and Zod.
 
 #### Installation
 
-`npm install nodl`
-`yarn add nodl`
-`bun install nodl`
+```
+npm install nodl
+yarn add nodl
+bun install nodl
+```
 
 ### API
 
