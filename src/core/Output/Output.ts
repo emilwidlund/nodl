@@ -1,6 +1,8 @@
 import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { v4 as uuid } from 'uuid';
+import { z } from 'zod';
 
+import { Connection } from '../Connection/Connection';
 import { Input } from '../Input/Input';
 import { IOutputProps } from '../Output/Output.types';
 
@@ -10,11 +12,13 @@ export class Output<TValue = any> extends ReplaySubject<TValue> {
     /** Name */
     public name: string;
     /** Type */
-    public type: object;
+    public type: z.Schema;
     /** Compute operation */
     public observable: Observable<TValue>;
     /** Value Operator subscription */
     public subscription: Subscription;
+    /** Associated Connections */
+    public connections: Connection<TValue>[];
 
     constructor(props: IOutputProps<TValue>) {
         super();
@@ -23,19 +27,28 @@ export class Output<TValue = any> extends ReplaySubject<TValue> {
         this.type = props.type;
         this.observable = props.observable;
         this.subscription = this.observable.subscribe(this);
+        this.connections = [];
+    }
+
+    /** Determines if output is connected */
+    public get connected(): boolean {
+        return this.connections.length > 0;
     }
 
     /** Connects the output with a compatible input port */
-    public connect(input: Input<TValue>) {
-        if (input.type !== this.type) {
-            throw new Error('Input type is incompatible with Output type');
-        }
-
-        this.subscription.unsubscribe();
-        this.subscription = this.subscribe(input);
+    public connect(input: Input<TValue>): Connection<TValue> {
+        return new Connection(this, input);
     }
 
+    /** Disposes the Output */
     public dispose() {
+        for (const connection of this.connections) {
+            connection.dispose();
+        }
+
+        this.connections = [];
+
         this.subscription.unsubscribe();
+        this.unsubscribe();
     }
 }

@@ -20,7 +20,7 @@ bun install nodl
 
 ```typescript
 import { z } from 'zod';
-import { Context, Node, Input, Output } from 'nodl';
+import { Node, Input, Output } from 'nodl';
 import { combineLatest, map } from 'rxjs';
 
 /** Declare a zod schema for value validation */
@@ -43,13 +43,10 @@ class Addition extends Node {
     };
 }
 
-/** The context to bind the nodes to */
-const context = new Context();
-
 /** Declare 3 addition nodes */
-const additionNode1 = new Addition(context);
-const additionNode2 = new Addition(context);
-const additionNode3 = new Addition(context);
+const additionNode1 = new Addition();
+const additionNode2 = new Addition();
+const additionNode3 = new Addition();
 
 /** Connect them together */
 additionNode1.outputs.output.connect(additionNode3.inputs.a);
@@ -64,32 +61,4 @@ additionNode3.outputs.output.subscribe(console.log);
 
 #### React
 
-```jsx
-import * as React from 'react';
-import { Context } from 'nodl';
-import { Canvas, NodeContainer } from 'nodl/react';
-
-import { Addition } from './nodes/Addition';
-
-export const App = () => {
-    const context = new Context();
-    const addition = new Addition(context);
-
-    return (
-        <Canvas size={{ width: 5000, height: 5000 }}>
-            {Array.from(context.nodes.values()).map(node => {
-                return (
-                    <NodeContainer
-                        key={node.id}
-                        node={node}
-                        headerComponent={node => <MyHeader node={node} />}
-                        windowComponent={node => <MyWindow node={node} />}
-                        bodyComponent={node => <MyBody node={node} />}
-                        bounds="parent"
-                    />
-                );
-            })}
-        </Canvas>
-    );
-};
-```
+Coming soon.
