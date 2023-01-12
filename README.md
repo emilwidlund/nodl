@@ -2,6 +2,8 @@
 
 A library for node-based applications. Leveraged by RxJS and Zod.
 
+![Visual representation of a Nodl node](assets/nodl.png?raw=true)
+
 ### Getting Started
 
 #### Installation
