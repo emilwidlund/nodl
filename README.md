@@ -66,7 +66,10 @@ additionNode3.outputs.output.subscribe(console.log);
 
 ```jsx
 import * as React from 'react';
-import { Canvas, Node } from 'nodl';
+import { Context } from 'nodl';
+import { Canvas, NodeContainer } from 'nodl/react';
+
+import { Addition } from './nodes/Addition';
 
 export const App = () => {
     const context = new Context();
@@ -76,7 +79,7 @@ export const App = () => {
         <Canvas size={{ width: 5000, height: 5000 }}>
             {Array.from(context.nodes.values()).map(node => {
                 return (
-                    <Node
+                    <NodeContainer
                         key={node.id}
                         node={node}
                         headerComponent={node => <MyHeader node={node} />}
