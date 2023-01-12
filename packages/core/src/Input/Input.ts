@@ -1,7 +1,5 @@
 import { BehaviorSubject } from 'rxjs';
 import { v4 as uuid } from 'uuid';
-import 'reflect-metadata';
-
 import { z } from 'zod';
 
 import { Connection } from '../Connection/Connection';
