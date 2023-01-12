@@ -1,8 +1,6 @@
-# nodl
+# @nodl/core
 
-A library for node-based applications. Leveraged by RxJS and Zod.
-
-![Visual representation of a Nodl node](assets/nodl.png?raw=true)
+The core implementation of the Nodl framework.
 
 ### Getting Started
 
@@ -10,22 +8,20 @@ A library for node-based applications. Leveraged by RxJS and Zod.
 
 ```
 # Using NPM
-npm install @nodl/core @nodl/react
+npm install @nodl/core
 
 # Using Yarn
-yarn add @nodl/core @nodl/react
+yarn add @nodl/core
 
 # Using Bun
-bun install @nodl/core @nodl/react
+bun install @nodl/core
 ```
 
 ### API
 
-#### Core
-
 ```typescript
 import { z } from 'zod';
-import { Node, Input, Output } from 'nodl';
+import { Node, Input, Output } from '@nodl/core';
 import { combineLatest, map } from 'rxjs';
 
 /** Declare a zod schema for value validation */
@@ -63,7 +59,3 @@ additionNode2.outputs.output.connect(additionNode3.inputs.b);
  */
 additionNode3.outputs.output.subscribe(console.log);
 ```
-
-#### React
-
-Coming soon.
