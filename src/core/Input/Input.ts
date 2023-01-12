@@ -4,7 +4,7 @@ import 'reflect-metadata';
 
 import { IInputProps } from './Input.types';
 
-export class Input<T = any> extends BehaviorSubject<T> {
+export class Input<TValue = any> extends BehaviorSubject<TValue> {
     /** Identifier */
     public id: string = uuid();
     /** Name */
@@ -12,9 +12,9 @@ export class Input<T = any> extends BehaviorSubject<T> {
     /** Type */
     public type: object;
     /** Default Value */
-    public defaultValue: T;
+    public defaultValue: TValue;
 
-    constructor(props: IInputProps<T>) {
+    constructor(props: IInputProps<TValue>) {
         super(props.defaultValue);
 
         this.name = props.name || 'Untitled';

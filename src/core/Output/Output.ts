@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { Input } from '../Input/Input';
 import { IOutputProps } from '../Output/Output.types';
 
-export class Output<T = any> extends ReplaySubject<T> {
+export class Output<TValue = any> extends ReplaySubject<TValue> {
     /** Identifier */
     public id: string = uuid();
     /** Name */
@@ -12,11 +12,11 @@ export class Output<T = any> extends ReplaySubject<T> {
     /** Type */
     public type: object;
     /** Compute operation */
-    public observable: Observable<T>;
+    public observable: Observable<TValue>;
     /** Value Operator subscription */
     public subscription: Subscription;
 
-    constructor(props: IOutputProps<T>) {
+    constructor(props: IOutputProps<TValue>) {
         super();
 
         this.name = props.name || 'Untitled';
@@ -26,7 +26,7 @@ export class Output<T = any> extends ReplaySubject<T> {
     }
 
     /** Connects the output with a compatible input port */
-    public connect(input: Input<T>) {
+    public connect(input: Input<TValue>) {
         if (input.type !== this.type) {
             throw new Error('Input type is incompatible with Output type');
         }

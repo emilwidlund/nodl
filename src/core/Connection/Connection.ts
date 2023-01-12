@@ -30,5 +30,7 @@ export class Connection<T> extends Subject<T> {
     /** Disposes the Connection */
     public dispose() {
         this.subscription.unsubscribe();
+
+        this.to.next(this.to.defaultValue);
     }
 }
