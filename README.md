@@ -4,6 +4,14 @@ A library for node-based applications. Leveraged by RxJS and Zod.
 
 ### Getting Started
 
+#### Installation
+
+`npm install nodl`
+`yarn add nodl`
+`bun install nodl`
+
+### API
+
 #### Core
 
 ```typescript
@@ -57,16 +65,23 @@ import * as React from 'react';
 import { Canvas, Node } from 'nodl';
 
 export const App = () => {
+    const context = new Context();
+    const addition = new Addition(context);
+
     return (
         <Canvas size={{ width: 5000, height: 5000 }}>
-            <Node
-                headerComponent={<MyHeader />}
-                windowComponent={<MyWindow />}
-                bodyComponent={<MyBody />}
-                options={{
-                    bounds: 'parent'
-                }}
-            />
+            {Array.from(context.nodes.values()).map(node => {
+                return (
+                    <Node
+                        key={node.id}
+                        node={node}
+                        headerComponent={node => <MyHeader node={node} />}
+                        windowComponent={node => <MyWindow node={node} />}
+                        bodyComponent={node => <MyBody node={node} />}
+                        bounds="parent"
+                    />
+                );
+            })}
         </Canvas>
     );
 };
