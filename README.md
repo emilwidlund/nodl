@@ -14,10 +14,10 @@ Nodl is divided up into a core package, and several UI packages which implements
 
 The core implementation of the Nodl framework. Exposes utilities and functions to define computational graphs.
 
-[See package](packages/core/README.md)
+[See package](packages/core)
 
 ### @nodl/react
 
 A React implementation of the Nodl framework. Exposes copmonents, containers, hooks & utilities to render Nodl nodes & connections.
 
-[See package](packages/react/README.md)
+[See package](packages/react)
