@@ -18,6 +18,8 @@ The core implementation of the Nodl framework. Exposes utilities and functions t
 
 ### @nodl/react
 
+*This package is not yet functional*
+
 A React implementation of the Nodl framework. Exposes copmonents, containers, hooks & utilities to render Nodl nodes & connections.
 
 [See package](packages/react)
