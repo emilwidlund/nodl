@@ -1,11 +1,14 @@
 {
     "name": "@nodl/core",
-    "version": "0.1.0",
+    "version": "0.1.2",
     "description": "Core implementation of the Nodl framework",
     "main": "build/index.js",
     "author": "Emil Widlund",
     "license": "MIT",
     "private": false,
+    "files": [
+        "build/*"
+    ],
     "scripts": {
         "build": "tsc",
         "test": "jest"

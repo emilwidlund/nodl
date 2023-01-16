@@ -12,6 +12,8 @@ export abstract class Node {
     public inputs: Record<string, Input> = {};
     /** Node Outputs */
     public outputs: Record<string, Output> = {};
+    /** Arbitrary Data Store */
+    public data: Record<string, unknown> = {};
 
     /** Disposes the Node */
     public dispose(): void {
