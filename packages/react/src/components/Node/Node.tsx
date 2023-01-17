@@ -1,20 +1,18 @@
 import * as React from 'react';
 import Draggable from 'react-draggable';
+
 import { NodeProps } from './Node.types';
 
-export const Node = React.forwardRef<HTMLDivElement>(({headerComponent,  windowComponent, bodyComponent, options}: NodeProps, ref) => {
-
-    return (
-        <Draggable {...options}>
-            <div ref={ref}>
-                <div className='handle'>
-                    {headerComponent}
+export const Node = React.forwardRef<HTMLDivElement, NodeProps>(
+    ({ node, className, headerComponent, windowComponent, bodyComponent, ...draggableOptions }: NodeProps, ref) => {
+        return (
+            <Draggable {...draggableOptions}>
+                <div className={className} ref={ref}>
+                    <div className="handle">{headerComponent?.(node)}</div>
+                    {windowComponent ? <div>{windowComponent?.(node)}</div> : undefined}
+                    <div>{bodyComponent?.(node)}</div>
                 </div>
-                {windowComponent ? <div>{windowComponent}</div> : undefined}
-                <div>
-                    {bodyComponent}
-                </div>
-            </div>
-        </Draggable>
-    );
-})
+            </Draggable>
+        );
+    }
+);

@@ -1,8 +1,11 @@
-import {DraggableProps} from 'react-draggable';
+import { Node } from '@nodl/core';
+import { DraggableProps } from 'react-draggable';
 
 export type NodeProps = {
-    headerComponent?: JSX.Element;
-    windowComponent?: JSX.Element;
-    bodyComponent?: JSX.Element;
-    options?: DraggableProps;
-}
+    node: Node;
+    headerComponent?: (node: Node) => JSX.Element;
+    windowComponent?: (node: Node) => JSX.Element;
+    bodyComponent?: (node: Node) => JSX.Element;
+    className?: string;
+    disabled?: boolean;
+} & DraggableProps;
