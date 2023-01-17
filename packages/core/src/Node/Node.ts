@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { Input } from '../Input/Input';
 import { Output } from '../Output/Output';
 
-export abstract class Node {
+export abstract class Node<TData extends Record<string, any> = Record<string, any>> {
     /** Identifier */
     public id: string = uuid();
     /** Node Name */
@@ -13,7 +13,7 @@ export abstract class Node {
     /** Node Outputs */
     public outputs: Record<string, Output> = {};
     /** Arbitrary Data Store */
-    public data: Record<string, unknown> = {};
+    public data: TData = {} as TData;
 
     /** Disposes the Node */
     public dispose(): void {
