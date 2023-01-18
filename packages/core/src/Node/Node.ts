@@ -1,9 +1,11 @@
 import { v4 as uuid } from 'uuid';
 
+import { Connection } from '../Connection/Connection';
 import { Input } from '../Input/Input';
 import { Output } from '../Output/Output';
+import { NodeData } from './Node.types';
 
-export abstract class Node<TData extends Record<string, any> = Record<string, any>> {
+export abstract class Node<TData extends NodeData = NodeData> {
     /** Identifier */
     public id: string = uuid();
     /** Node Name */
@@ -14,6 +16,13 @@ export abstract class Node<TData extends Record<string, any> = Record<string, an
     public outputs: Record<string, Output> = {};
     /** Arbitrary Data Store */
     public data: TData = {} as TData;
+
+    /** Associated connections */
+    public get connections() {
+        return [...Object.values(this.inputs), ...Object.values(this.outputs)]
+            .flatMap(port => ('connection' in port ? [port.connection] : port.connections))
+            .filter((connection): connection is Connection<unknown> => Boolean(connection));
+    }
 
     /** Disposes the Node */
     public dispose(): void {
