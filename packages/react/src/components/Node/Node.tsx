@@ -1,18 +1,123 @@
+import { cx } from '@emotion/css';
+import { observer } from 'mobx-react-lite';
 import * as React from 'react';
-import Draggable from 'react-draggable';
+import Draggable, { DraggableEventHandler } from 'react-draggable';
 
-import { NodeProps } from './Node.types';
+import { NODE_POSITION_OFFSET_X } from '../../constants';
+import { useHover } from '../../hooks/useHover/useHover';
+import { store as canvasStore } from '../../stores/CanvasStore/CanvasStore';
+import { fromCanvasCartesianPoint } from '../../utils/coordinates/coordinates';
+import { Port } from '../Port/Port';
+import {
+    nodeHeaderWrapperStyles,
+    nodeContentWrapperStyles,
+    nodeWrapperStyles,
+    nodePortsWrapperStyles,
+    nodeHeaderActionsStyles,
+    nodeActionStyles,
+    nodeHeaderNameWrapperStyle,
+    nodeWindowWrapperStyles
+} from './Node.styles';
+import { NodeActionProps, NodePortsProps, NodeProps } from './Node.types';
 
-export const Node = React.forwardRef<HTMLDivElement, NodeProps>(
-    ({ node, className, headerComponent, windowComponent, bodyComponent, ...draggableOptions }: NodeProps, ref) => {
-        return (
-            <Draggable {...draggableOptions}>
-                <div className={className} ref={ref}>
-                    <div className="handle">{headerComponent?.(node)}</div>
-                    {windowComponent ? <div>{windowComponent?.(node)}</div> : undefined}
-                    <div>{bodyComponent?.(node)}</div>
+export const Node = observer(({ node, actions, windowComponent }: NodeProps) => {
+    const ref = React.useRef<HTMLDivElement>(null);
+    const { onMouseEnter, onMouseLeave, isHovered } = useHover();
+
+    React.useEffect(() => {
+        if (ref.current) {
+            canvasStore.setNodeElement(node.id, ref.current);
+
+            return () => {
+                canvasStore.removeNodeElement(node.id);
+            };
+        }
+    }, [ref]);
+
+    const handleOnClick = React.useCallback(
+        (e: React.MouseEvent<HTMLDivElement>) => {
+            if (!canvasStore.selectedNodes?.includes(node)) {
+                canvasStore.selectNodes([node]);
+            }
+        },
+        [node]
+    );
+
+    const handleOnFocus = React.useCallback(() => {
+        if (!canvasStore.selectedNodes?.includes(node)) {
+            canvasStore.selectNodes([node]);
+        }
+    }, [node]);
+
+    const handleOnDrag: DraggableEventHandler = React.useCallback(
+        (e, { deltaX, deltaY }) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            for (const selectedNode of canvasStore.selectedNodes || []) {
+                canvasStore.nodePositions.set(node.id, {
+                    x: selectedNode.data.position.x + deltaX,
+                    y: selectedNode.data.position.y + -deltaY
+                });
+            }
+        },
+        [node]
+    );
+
+    const handleRemoveNode = React.useCallback(() => {
+        node.dispose();
+    }, [node]);
+
+    const active = React.useMemo(() => canvasStore.selectedNodes?.indexOf(node) !== -1, [node]);
+    const position = canvasStore.nodePositions.get(node.id) || { x: 0, y: 0 };
+
+    return (
+        <Draggable
+            position={fromCanvasCartesianPoint(position.x - NODE_POSITION_OFFSET_X, position.y)}
+            onDrag={handleOnDrag}
+            handle=".handle"
+        >
+            <div
+                ref={ref}
+                className={nodeWrapperStyles(active)}
+                onClick={handleOnClick}
+                onFocus={handleOnFocus}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                tabIndex={0}
+            >
+                <div className={cx(nodeHeaderWrapperStyles(active), 'handle')}>
+                    <div className={nodeHeaderNameWrapperStyle}>
+                        <span>{node.name}</span>
+                    </div>
+                    {!!actions?.length && (
+                        <div className={nodeHeaderActionsStyles(isHovered || active)}>
+                            <NodeAction color="#ff4444" onClick={handleRemoveNode} />
+                        </div>
+                    )}
                 </div>
-            </Draggable>
-        );
-    }
-);
+                {typeof windowComponent === 'function' ? (
+                    <div className={nodeWindowWrapperStyles} children={windowComponent(node)} />
+                ) : undefined}
+                <div className={nodeContentWrapperStyles}>
+                    <NodePorts ports={Object.values(node.inputs)} />
+                    <NodePorts ports={Object.values(node.outputs)} isOutputWrapper={true} />
+                </div>
+            </div>
+        </Draggable>
+    );
+});
+
+const NodeAction = ({ color = '#fff', onClick }: NodeActionProps) => {
+    return <div className={nodeActionStyles(color)} color={color} onClick={onClick} />;
+};
+
+const NodePorts = ({ ports, isOutputWrapper }: NodePortsProps) => {
+    return (
+        <div className={nodePortsWrapperStyles(isOutputWrapper)}>
+            {ports.map(port => (
+                <Port key={port.id} port={port} />
+            ))}
+        </div>
+    );
+};

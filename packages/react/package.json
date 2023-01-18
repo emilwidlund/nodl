@@ -10,6 +10,7 @@
         "build/*"
     ],
     "scripts": {
+        "build": "tsc",
         "test": "jest"
     },
     "repository": {

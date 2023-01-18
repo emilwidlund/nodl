@@ -3,112 +3,101 @@ import * as React from 'react';
 
 import { Canvas } from '../../components/Canvas/Canvas';
 import { Connection } from '../../components/Connection/Connection';
+import { Node } from '../../components/Node/Node';
 import { CANVAS_SIZE } from '../../constants';
-import { useCircuit } from '../../hooks/useCircuit/useCircuit';
 import { useKeyboardActions } from '../../hooks/useKeyboardActions/useKeyboardActions';
-import { useMousePosition } from '../../hooks/useMousePosition/useMousePosition';
+import { store as canvasStore } from '../../stores/CanvasStore/CanvasStore';
 import { normalizeBounds } from '../../utils/bounds/bounds';
-import { CircuitStyles, circuitSelectionStyles } from './Canvas.styles';
-import { ICircuitProps, IConnectionsProps } from './Canvas.types';
+import { circuitContainerStyles, circuitSelectionStyles } from './Circuit.styles';
 
 const Nodes = observer(() => {
-    const circuit = useCircuit();
-
     return (
         <>
-            {Array.from(circuit.circuit?.nodes.values() || []).map(node => (
-                <NodeContainer key={node.id} node={node} />
+            {Array.from(canvasStore.nodes.values() || []).map(node => (
+                <Node key={node.id} node={node} />
             ))}
         </>
     );
 });
 
-const Connections = observer(({ mousePosition }: IConnectionsProps) => {
+const Connections = observer(() => {
     const ref = React.useRef<SVGSVGElement>(null);
-    const circuit = useCircuit();
 
-    const onClick = React.useCallback(
-        (e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
-            if (ref.current === e.target) {
-                circuit.setSelectedNodes([]);
-            }
-        },
-        [circuit]
-    );
+    const onClick = React.useCallback((e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
+        if (ref.current === e.target) {
+            canvasStore.selectNodes([]);
+        }
+    }, []);
 
     return (
         <svg ref={ref} id="connections" width="100%" height="100%" onClick={onClick}>
-            {Array.from(circuit.circuit?.connections.values() || []).map(connection => (
+            {Array.from(canvasStore.connections.values() || []).map(connection => (
                 <Connection key={connection.id} connection={connection} />
             ))}
 
-            {circuit.connectionDraft && <Connection output={circuit.connectionDraft} point={mousePosition} />}
+            {canvasStore.draftConnectionSource && <Connection output={canvasStore.draftConnectionSource} />}
         </svg>
     );
 });
 
 const Selection = observer(() => {
-    const circuit = useCircuit();
-
-    return circuit.selectionBounds ? (
-        <div className={circuitSelectionStyles(normalizeBounds(circuit.selectionBounds))} />
+    return canvasStore.selectionBounds ? (
+        <div className={circuitSelectionStyles(normalizeBounds(canvasStore.selectionBounds))} />
     ) : null;
 });
 
 export const Circuit = observer(
-    React.forwardRef<HTMLDivElement, ICircuitProps>(({ onFullscreen }, ref) => {
-        const circuit = useCircuit();
-        const { onMouseMove: mouseMoveHandler, mousePosition } = useMousePosition();
+    React.forwardRef<HTMLDivElement>((props, ref) => {
         useKeyboardActions();
 
-        const onMouseMove = React.useCallback(
-            (e: React.MouseEvent<HTMLDivElement>) => {
-                mouseMoveHandler(e);
+        const onMouseMove = React.useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const x = e.nativeEvent.clientX - rect.left;
+            const y = e.nativeEvent.clientY - rect.top;
 
-                if (circuit.selectionBounds) {
-                    const { x, y, width, height } = circuit.selectionBounds;
+            canvasStore.setMousePosition({ x, y });
 
-                    const bounds = {
-                        x,
-                        y,
-                        width: width + e.movementX,
-                        height: height + e.movementY
-                    };
+            if (canvasStore.selectionBounds) {
+                const { x, y, width, height } = canvasStore.selectionBounds;
 
-                    circuit.setSelectionBounds(bounds);
-                }
-            },
-            [circuit, mouseMoveHandler]
-        );
+                const bounds = {
+                    x,
+                    y,
+                    width: width + e.movementX,
+                    height: height + e.movementY
+                };
 
-        const onMouseDown = React.useCallback(
-            ({ nativeEvent }: React.MouseEvent<HTMLDivElement>) => {
-                if ((nativeEvent.target as HTMLDivElement).id === 'connections') {
-                    circuit.setSelectionBounds({ x: mousePosition.x, y: mousePosition.y, width: 0, height: 0 });
-                }
-            },
-            [circuit, mousePosition]
-        );
+                canvasStore.setSelectionBounds(bounds);
+            }
+        }, []);
 
-        const onMouseUp = React.useCallback(
-            (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                circuit.setConnectionDraft();
-                circuit.setSelectionBounds();
-            },
-            [circuit]
-        );
+        const onMouseDown = React.useCallback(({ nativeEvent }: React.MouseEvent<HTMLDivElement>) => {
+            if ((nativeEvent.target as HTMLDivElement).id === 'connections') {
+                canvasStore.setSelectionBounds({
+                    x: canvasStore.mousePosition.x,
+                    y: canvasStore.mousePosition.y,
+                    width: 0,
+                    height: 0
+                });
+            }
+        }, []);
+
+        const onMouseUp = React.useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            canvasStore.setDraftConnectionSource();
+            canvasStore.setSelectionBounds();
+        }, []);
 
         return (
             <Canvas
                 ref={ref}
-                className={CircuitStyles}
+                className={circuitContainerStyles}
                 size={{ width: CANVAS_SIZE, height: CANVAS_SIZE }}
                 onMouseDown={onMouseDown}
                 onMouseMove={onMouseMove}
                 onMouseUp={onMouseUp}
             >
                 <Nodes />
-                <Connections mousePosition={mousePosition} />
+                <Connections />
                 <Selection />
             </Canvas>
         );

@@ -1,11 +1,20 @@
-import { Node } from '@nodl/core';
+import { Input, Node, Output } from '@nodl/core';
 import { DraggableProps } from 'react-draggable';
 
 export type NodeProps = {
     node: Node;
-    headerComponent?: (node: Node) => JSX.Element;
     windowComponent?: (node: Node) => JSX.Element;
-    bodyComponent?: (node: Node) => JSX.Element;
+    actions?: NodeActionProps[];
     className?: string;
     disabled?: boolean;
-} & DraggableProps;
+} & Partial<DraggableProps>;
+
+export type NodeActionProps = {
+    color?: string;
+    onClick(e: React.MouseEvent<HTMLElement, MouseEvent>): void;
+};
+
+export type NodePortsProps = {
+    ports: Input<unknown>[] | Output<unknown>[];
+    isOutputWrapper?: boolean;
+};

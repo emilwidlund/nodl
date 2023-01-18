@@ -5,12 +5,15 @@ import { NODE_CENTER } from '../../constants';
 import { normalizeBounds, withinBounds } from '../../utils/bounds/bounds';
 import { Bounds } from '../../utils/bounds/bounds.types';
 import { fromCanvasCartesianPoint } from '../../utils/coordinates/coordinates';
+import { MousePosition } from './CanvasStore.types';
 
 export class CanvasStore {
     /** Associated Nodes */
     public nodes: Node[] = [];
     /** Associated Node Elements */
     public nodeElements: Map<Node['id'], HTMLDivElement> = new Map();
+    /** Node Positions */
+    public nodePositions: Map<Node['id'], { x: number; y: number }> = new Map();
     /** Associated Port Elements */
     public portElements: Map<Input['id'] | Output['id'], HTMLDivElement> = new Map();
     /** Selected Nodes */
@@ -19,6 +22,8 @@ export class CanvasStore {
     public draftConnectionSource?: Output;
     /** Selection bounds */
     public selectionBounds?: Bounds;
+    /** Mouse Position */
+    public mousePosition: MousePosition = { x: 0, y: 0 };
 
     /** Selection Bounds autorun disposer */
     private selectionBoundsDisposer: IReactionDisposer;
@@ -27,6 +32,11 @@ export class CanvasStore {
         makeAutoObservable(this);
 
         this.selectionBoundsDisposer = this.onSelectionBoundsChange();
+    }
+
+    /** All associated connections */
+    public get connections() {
+        return Array.from(new Set(this.nodes.flatMap(node => node.connections)).values());
     }
 
     /** Associates a given Node instance with an HTML Element */
@@ -75,6 +85,18 @@ export class CanvasStore {
         this.selectionBounds = bounds;
     }
 
+    /** Sets the mouse position */
+    public setMousePosition(mousePosition: MousePosition): void {
+        this.mousePosition = mousePosition;
+    }
+
+    /** Returns the node with the associated port */
+    public getNodeByPortId(portId: Input['id'] | Output['id']) {
+        return this.nodes.find(node => {
+            return [...Object.values(node.inputs), ...Object.values(node.outputs)].some(port => port.id === portId);
+        });
+    }
+
     /** Disposes the store by cleaning up effects */
     public dispose(): void {
         this.selectionBoundsDisposer();
@@ -96,7 +118,7 @@ export class CanvasStore {
 
                         if (
                             withinBounds(bounds, {
-                                ...fromCanvasCartesianPoint(node.data.position.x: - NODE_CENTER, node.data.position.y),
+                                ...fromCanvasCartesianPoint(node.data.position.x - NODE_CENTER, node.data.position.y),
                                 width: nodeRect.width,
                                 height: nodeRect.height
                             })
@@ -111,3 +133,5 @@ export class CanvasStore {
         });
     }
 }
+
+export const store = new CanvasStore();

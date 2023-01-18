@@ -1,9 +1,10 @@
+import { Connection as NodlConnection } from '@nodl/core';
 import { autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
 import { NODE_POSITION_OFFSET_X } from '../../constants';
-import { useStore } from '../../hooks/useStore/useStore';
+import { store as canvasStore } from '../../stores/CanvasStore/CanvasStore';
 import { fromCanvasCartesianPoint } from '../../utils/coordinates/coordinates';
 import { ConnectionProps } from './Connection.types';
 import { quadraticCurve } from './Connection.utils';
@@ -16,32 +17,37 @@ const OUTPUT_PORT_OFFSET_Y = 12;
 
 const defaultPosition = { x: 0, y: 0 };
 
-export const Connection = observer(<T,>({ output, point, connection }: ConnectionProps<T>) => {
+export const Connection = observer(<T,>({ output, connection }: ConnectionProps<T>) => {
     const [pathString, setPathString] = React.useState('');
     const [fromPos, setFromPos] = React.useState(defaultPosition);
     const [toPos, setToPos] = React.useState(defaultPosition);
 
-    const circuit = useStore();
-
     const outputElement = connection
-        ? circuit.portElements[connection.from.id]
+        ? canvasStore.portElements.get(connection.from.id)
         : output
-        ? circuit.portElements[output.id]
+        ? canvasStore.portElements.get(output.id)
         : undefined;
-    const inputElement = connection && circuit.portElements[connection.to.id];
+    const inputElement = connection && canvasStore.portElements.get(connection.to.id);
 
     React.useEffect(() => {
         if (outputElement && inputElement) {
             return autorun(() => {
                 if (connection) {
+                    const fromPosition = canvasStore.getNodeByPortId(connection.from.id)?.data.position;
+                    const toPosition = canvasStore.getNodeByPortId(connection.to.id)?.data.position;
+
+                    if (!fromPosition || !toPosition) {
+                        return;
+                    }
+
                     const outputCartesian = fromCanvasCartesianPoint(
-                        connection.from.node.data.position.x + NODE_POSITION_OFFSET_X,
-                        connection.from.node.data.position.y
+                        fromPosition.x + NODE_POSITION_OFFSET_X,
+                        fromPosition.y
                     );
 
                     const inputCartesian = fromCanvasCartesianPoint(
-                        connection.to.node.data.position.x - NODE_POSITION_OFFSET_X,
-                        connection.to.node.data.position.y
+                        toPosition.x - NODE_POSITION_OFFSET_X,
+                        toPosition.y
                     );
 
                     const outputPortPosition = {
@@ -71,13 +77,19 @@ export const Connection = observer(<T,>({ output, point, connection }: Connectio
                 }
             });
         }
-    }, [outputElement, inputElement, circuit]);
+    }, [outputElement, inputElement]);
 
     React.useEffect(() => {
-        if (output && outputElement && point) {
+        if (output && outputElement) {
+            const outputPosition = canvasStore.getNodeByPortId(output.id)?.data.position;
+
+            if (!outputPosition) {
+                return;
+            }
+
             const outputCartesian = fromCanvasCartesianPoint(
-                output.node.data.position.x + NODE_POSITION_OFFSET_X,
-                output.node.data.position.y
+                outputPosition.x + NODE_POSITION_OFFSET_X,
+                outputPosition.y
             );
 
             const outputPortPosition = {
@@ -91,20 +103,21 @@ export const Connection = observer(<T,>({ output, point, connection }: Connectio
             };
 
             setFromPos(newFromPos);
-            setToPos(point);
+            setToPos(canvasStore.mousePosition);
 
-            setPathString(quadraticCurve(newFromPos, point));
+            setPathString(quadraticCurve(newFromPos, canvasStore.mousePosition));
         }
-    }, [output, outputElement, point, circuit]);
+    }, [output, outputElement]);
 
     const handleClick = React.useCallback(() => {
         if (connection) {
-            circuit.circuit?.disconnect(connection);
+            connection.dispose();
         }
     }, [connection]);
 
     const selectedConnection =
-        connection && circuit.selectedNodes?.flatMap(node => node.connections).includes(connection);
+        connection &&
+        canvasStore.selectedNodes?.flatMap(node => node.connections).includes(connection as NodlConnection<unknown>);
     const strokeColor =
         selectedConnection || output
             ? getComputedStyle(document.documentElement).getPropertyValue('--accent-color')
