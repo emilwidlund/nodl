@@ -54,7 +54,7 @@ export const circuitContainerStyles = css`
         font-style: normal;
         font-weight: 500;
         font-display: swap;
-        src: url('Inter-Medium.woff2?v=3.19') format('woff2'), url('Inter-Medium.woff?v=3.19') format('woff');
+        src: url('Inter-Medium.woff2') format('woff2'), url('Inter-Medium.woff') format('woff');
     }
 
     /* -------------------------------------------------------
@@ -72,7 +72,7 @@ Usage:
         font-display: swap;
         font-style: normal;
         font-named-instance: 'Regular';
-        src: url('Inter-roman.var.woff2?v=3.19') format('woff2');
+        src: url('Inter-roman.var.woff2') format('woff2');
     }
 
     /* --------------------------------------------------------------------------
@@ -93,6 +93,6 @@ explicitly, e.g.
         font-weight: 100 900;
         font-display: swap;
         font-style: oblique 0deg 10deg;
-        src: url('Inter.var.woff2?v=3.19') format('woff2');
+        src: url('Inter.var.woff2') format('woff2');
     }
 `;
