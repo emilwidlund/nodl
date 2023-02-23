@@ -4,7 +4,7 @@ _This repository is still in development, and not ready for consumption._
 
 A library for node-based applications. Leveraged by RxJS and Zod.
 
-![Visual representation of a Nodl node](assets/nodl.png?raw=true)
+![Visual representation of a nodl](assets/nodl.png?raw=true)
 
 ## Packages
 
