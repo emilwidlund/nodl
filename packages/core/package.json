@@ -23,6 +23,7 @@
     },
     "homepage": "https://github.com/emilwidlund/nodl#readme",
     "dependencies": {
+        "mobx": "^6.8.0",
         "rxjs": "^7.8.0",
         "typescript": "^4.9.4",
         "uuid": "^9.0.0",

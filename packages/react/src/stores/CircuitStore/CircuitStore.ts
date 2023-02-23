@@ -1,13 +1,14 @@
 import { Connection, Input, Node, Output } from '@nodl/core';
 import { autorun, IReactionDisposer, makeAutoObservable } from 'mobx';
+import { createContext } from 'react';
 
 import { NODE_CENTER } from '../../constants';
 import { normalizeBounds, withinBounds } from '../../utils/bounds/bounds';
 import { Bounds } from '../../utils/bounds/bounds.types';
 import { fromCanvasCartesianPoint } from '../../utils/coordinates/coordinates';
-import { MousePosition } from './CanvasStore.types';
+import { MousePosition, NodeWithPosition, StoreProviderValue } from './CircuitStore.types';
 
-export class CanvasStore {
+export class CircuitStore {
     /** Associated Nodes */
     public nodes: Node[] = [];
     /** Associated Node Elements */
@@ -40,8 +41,18 @@ export class CanvasStore {
     }
 
     /** Sets the associated nodes */
-    public setNodes(nodes: Node[]) {
-        this.nodes = nodes;
+    public setNodes(nodesWithPosition: NodeWithPosition[]) {
+        for (const [node, position] of nodesWithPosition) {
+            this.nodes.push(node);
+            this.nodePositions.set(node.id, position);
+        }
+    }
+
+    /** Removes a node from the store */
+    public removeNode(nodeId: Node['id']) {
+        this.nodes = this.nodes.filter(node => node.id !== nodeId);
+        this.nodeElements.delete(nodeId);
+        this.nodePositions.delete(nodeId);
     }
 
     /** Associates a given Node instance with an HTML Element */
@@ -96,8 +107,13 @@ export class CanvasStore {
     }
 
     /** Sets a node's position */
-    public setNodePosition(node: Node, position: { x: number; y: number }) {
-        this.nodePositions.set(node.id, position);
+    public setNodePosition(nodeId: Node['id'], position: { x: number; y: number }) {
+        this.nodePositions.set(nodeId, position);
+    }
+
+    /** Remove a node's position */
+    public removeNodePosition(nodeId: Node['id']) {
+        this.nodePositions.delete(nodeId);
     }
 
     /** Returns the node with the associated port */
@@ -120,7 +136,7 @@ export class CanvasStore {
 
                 const selectionCandidates = [];
 
-                for (const node of this.nodes.values()) {
+                for (const node of this.nodes) {
                     const nodeElement = this.nodeElements.get(node.id);
 
                     if (nodeElement) {
@@ -147,4 +163,8 @@ export class CanvasStore {
     }
 }
 
-export const store = new CanvasStore();
+const defaultStoreProviderValue: StoreProviderValue = {
+    store: new CircuitStore()
+};
+
+export const StoreContext = createContext(defaultStoreProviderValue);

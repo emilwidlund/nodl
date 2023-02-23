@@ -17,11 +17,26 @@ yarn add @nodl/core
 bun install @nodl/core
 ```
 
+#### Additional dependencies
+
+Make sure to also install the following packages:
+
+```
+# Using NPM
+npm install rxjs zod
+
+# Using Yarn
+yarn add rxjs zod
+
+# Using Bun
+bun install rxjs zod
+```
+
 ### API
 
 #### Node
 
-Nodes are units that consists of inputs and outputs. They're conceptually very similar to functions, with the difference that outputs may be multiple, compared to a function's single return value. 
+Nodes are units that consists of inputs and outputs. They're conceptually very similar to functions, with the difference that outputs may be multiple, compared to a function's single return value.
 
 An Addition Node may for instance have two inputs and a single output, which computes the sum of the inputs.
 

@@ -5,7 +5,7 @@ import Draggable, { DraggableEventHandler } from 'react-draggable';
 
 import { NODE_POSITION_OFFSET_X } from '../../constants';
 import { useHover } from '../../hooks/useHover/useHover';
-import { store as canvasStore } from '../../stores/CanvasStore/CanvasStore';
+import { StoreContext } from '../../stores/CircuitStore/CircuitStore';
 import { fromCanvasCartesianPoint } from '../../utils/coordinates/coordinates';
 import { Port } from '../Port/Port';
 import {
@@ -23,29 +23,31 @@ import { NodeActionProps, NodePortsProps, NodeProps } from './Node.types';
 export const Node = observer(({ node, actions, windowComponent }: NodeProps) => {
     const ref = React.useRef<HTMLDivElement>(null);
     const { onMouseEnter, onMouseLeave, isHovered } = useHover();
+    const { store } = React.useContext(StoreContext);
 
     React.useEffect(() => {
         if (ref.current) {
-            canvasStore.setNodeElement(node.id, ref.current);
+            store.setNodeElement(node.id, ref.current);
 
             return () => {
-                canvasStore.removeNodeElement(node.id);
+                store.removeNodeElement(node.id);
+                store.removeNodePosition(node.id);
             };
         }
     }, [ref]);
 
     const handleOnClick = React.useCallback(
         (e: React.MouseEvent<HTMLDivElement>) => {
-            if (!canvasStore.selectedNodes?.includes(node)) {
-                canvasStore.selectNodes([node]);
+            if (!store.selectedNodes?.includes(node)) {
+                store.selectNodes([node]);
             }
         },
         [node]
     );
 
     const handleOnFocus = React.useCallback(() => {
-        if (!canvasStore.selectedNodes?.includes(node)) {
-            canvasStore.selectNodes([node]);
+        if (!store.selectedNodes?.includes(node)) {
+            store.selectNodes([node]);
         }
     }, [node]);
 
@@ -54,10 +56,10 @@ export const Node = observer(({ node, actions, windowComponent }: NodeProps) => 
             e.preventDefault();
             e.stopPropagation();
 
-            for (const selectedNode of canvasStore.selectedNodes || []) {
-                canvasStore.setNodePosition(selectedNode, {
-                    x: (canvasStore.nodePositions.get(selectedNode.id)?.x || 0) + deltaX,
-                    y: (canvasStore.nodePositions.get(selectedNode.id)?.y || 0) + -deltaY
+            for (const selectedNode of store.selectedNodes || []) {
+                store.setNodePosition(selectedNode.id, {
+                    x: (store.nodePositions.get(selectedNode.id)?.x || 0) + deltaX,
+                    y: (store.nodePositions.get(selectedNode.id)?.y || 0) + -deltaY
                 });
             }
         },
@@ -66,10 +68,12 @@ export const Node = observer(({ node, actions, windowComponent }: NodeProps) => 
 
     const handleRemoveNode = React.useCallback(() => {
         node.dispose();
+
+        store.removeNode(node.id);
     }, [node]);
 
-    const active = canvasStore.selectedNodes?.indexOf(node) !== -1;
-    const position = canvasStore.nodePositions.get(node.id) || { x: 0, y: 0 };
+    const active = store.selectedNodes?.indexOf(node) !== -1;
+    const position = store.nodePositions.get(node.id) || { x: 0, y: 0 };
 
     return (
         <Draggable
@@ -90,11 +94,9 @@ export const Node = observer(({ node, actions, windowComponent }: NodeProps) => 
                     <div className={nodeHeaderNameWrapperStyle}>
                         <span>{node.name}</span>
                     </div>
-                    {!!actions?.length && (
-                        <div className={nodeHeaderActionsStyles(isHovered || active)}>
-                            <NodeAction color="#ff4444" onClick={handleRemoveNode} />
-                        </div>
-                    )}
+                    <div className={nodeHeaderActionsStyles(isHovered || active)}>
+                        <NodeAction color="#ff4444" onClick={handleRemoveNode} />
+                    </div>
                 </div>
                 {typeof windowComponent === 'function' ? (
                     <div className={nodeWindowWrapperStyles} children={windowComponent(node)} />

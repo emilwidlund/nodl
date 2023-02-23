@@ -1,3 +1,4 @@
+import { action, computed, makeObservable, observable } from 'mobx';
 import { BehaviorSubject } from 'rxjs';
 import { v4 as uuid } from 'uuid';
 import { z } from 'zod';
@@ -15,7 +16,7 @@ export class Input<TValue = any> extends BehaviorSubject<TValue> {
     /** Default Value */
     public defaultValue: TValue;
     /** Associated Connection */
-    public connection: Connection<TValue> | undefined;
+    public connection: Connection<TValue> | null;
 
     constructor(props: IInputProps<TValue>) {
         super(props.defaultValue);
@@ -23,6 +24,17 @@ export class Input<TValue = any> extends BehaviorSubject<TValue> {
         this.name = props.name || 'Untitled';
         this.type = props.type;
         this.defaultValue = props.defaultValue;
+        this.connection = null;
+
+        makeObservable(this, {
+            id: observable,
+            name: observable,
+            type: observable,
+            defaultValue: observable,
+            connection: observable,
+            connected: computed,
+            dispose: action
+        });
     }
 
     /** Determines if input is connected */
@@ -33,7 +45,7 @@ export class Input<TValue = any> extends BehaviorSubject<TValue> {
     /** Disposes the Input */
     public dispose(): void {
         this.connection?.dispose();
-        this.connection = undefined;
+        this.connection = null;
 
         this.unsubscribe();
     }

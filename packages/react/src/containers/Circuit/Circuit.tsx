@@ -1,3 +1,5 @@
+import { cx } from '@emotion/css';
+import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
@@ -6,15 +8,17 @@ import { Connection } from '../../components/Connection/Connection';
 import { Node } from '../../components/Node/Node';
 import { CANVAS_SIZE } from '../../constants';
 import { useKeyboardActions } from '../../hooks/useKeyboardActions/useKeyboardActions';
-import { store as canvasStore } from '../../stores/CanvasStore/CanvasStore';
+import { StoreContext } from '../../stores/CircuitStore/CircuitStore';
 import { normalizeBounds } from '../../utils/bounds/bounds';
 import { circuitContainerStyles, circuitSelectionStyles } from './Circuit.styles';
 import { CircuitProps } from './Circuit.types';
 
 const Nodes = observer(() => {
+    const { store } = React.useContext(StoreContext);
+
     return (
         <>
-            {Array.from(canvasStore.nodes.values() || []).map(node => (
+            {Array.from(store.nodes.values() || []).map(node => (
                 <Node key={node.id} node={node} />
             ))}
         </>
@@ -23,43 +27,46 @@ const Nodes = observer(() => {
 
 const Connections = observer(() => {
     const ref = React.useRef<SVGSVGElement>(null);
+    const { store } = React.useContext(StoreContext);
 
     const onClick = React.useCallback((e: React.MouseEvent<SVGSVGElement, MouseEvent>) => {
         if (ref.current === e.target) {
-            canvasStore.selectNodes([]);
+            store.selectNodes([]);
         }
     }, []);
 
     return (
         <svg ref={ref} id="connections" width="100%" height="100%" onClick={onClick}>
-            {Array.from(canvasStore.connections.values() || []).map(connection => (
+            {Array.from(store.connections.values() || []).map(connection => (
                 <Connection key={connection.id} connection={connection} />
             ))}
 
-            {canvasStore.draftConnectionSource && <Connection output={canvasStore.draftConnectionSource} />}
+            {store.draftConnectionSource && <Connection output={store.draftConnectionSource} />}
         </svg>
     );
 });
 
 const Selection = observer(() => {
-    return canvasStore.selectionBounds ? (
-        <div className={circuitSelectionStyles(normalizeBounds(canvasStore.selectionBounds))} />
+    const { store } = React.useContext(StoreContext);
+
+    return store.selectionBounds ? (
+        <div className={circuitSelectionStyles(normalizeBounds(store.selectionBounds))} />
     ) : null;
 });
 
 export const Circuit = observer(
     React.forwardRef<HTMLDivElement, CircuitProps>((props, ref) => {
-        useKeyboardActions();
+        useKeyboardActions(props.store);
 
         const onMouseMove = React.useCallback((e: React.MouseEvent<HTMLDivElement>) => {
             const rect = e.currentTarget.getBoundingClientRect();
             const x = e.nativeEvent.clientX - rect.left;
             const y = e.nativeEvent.clientY - rect.top;
 
-            canvasStore.setMousePosition({ x, y });
+            props.store.setMousePosition({ x, y });
 
-            if (canvasStore.selectionBounds) {
-                const { x, y, width, height } = canvasStore.selectionBounds;
+            if (props.store.selectionBounds) {
+                const { x, y, width, height } = props.store.selectionBounds;
 
                 const bounds = {
                     x,
@@ -68,15 +75,15 @@ export const Circuit = observer(
                     height: height + e.movementY
                 };
 
-                canvasStore.setSelectionBounds(bounds);
+                props.store.setSelectionBounds(bounds);
             }
         }, []);
 
         const onMouseDown = React.useCallback(({ nativeEvent }: React.MouseEvent<HTMLDivElement>) => {
             if ((nativeEvent.target as HTMLDivElement).id === 'connections') {
-                canvasStore.setSelectionBounds({
-                    x: canvasStore.mousePosition.x,
-                    y: canvasStore.mousePosition.y,
+                props.store.setSelectionBounds({
+                    x: props.store.mousePosition.x,
+                    y: props.store.mousePosition.y,
                     width: 0,
                     height: 0
                 });
@@ -84,31 +91,73 @@ export const Circuit = observer(
         }, []);
 
         const onMouseUp = React.useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-            canvasStore.setDraftConnectionSource(null);
-            canvasStore.setSelectionBounds(null);
+            props.store.setDraftConnectionSource(null);
+            props.store.setSelectionBounds(null);
         }, []);
 
         React.useEffect(() => {
-            canvasStore.setNodes(props.nodes);
+            return reaction(
+                () => props.store.connections,
+                (connections, prevConnections) => {
+                    const addedConnections = connections.filter(connection => !prevConnections.includes(connection));
+                    const removedConnections = prevConnections.filter(connection => !connections.includes(connection));
 
-            for (const node of props.nodes) {
-                canvasStore.setNodePosition(node, { x: 0, y: 0 });
-            }
+                    if (addedConnections.length && props.onConnection) {
+                        for (const connection of addedConnections) {
+                            props.onConnection(connection);
+                        }
+                    }
+
+                    if (removedConnections.length && props.onConnectionRemoval) {
+                        for (const connection of removedConnections) {
+                            props.onConnectionRemoval(connection);
+                        }
+                    }
+                }
+            );
+        }, [props]);
+
+        React.useEffect(() => {
+            return reaction(
+                () => props.store.nodes,
+                (nodes, prevNodes) => {
+                    const removedNodes = prevNodes.filter(node => !nodes.includes(node));
+
+                    if (removedNodes.length && props.onNodeRemoval) {
+                        for (const node of removedNodes) {
+                            props.onNodeRemoval(node);
+                        }
+                    }
+                }
+            );
+        }, [props]);
+
+        React.useEffect(() => {
+            return reaction(
+                () => props.store.selectedNodes,
+                (selectedNodes, prevSelectedNodes) => {
+                    if (selectedNodes.length !== prevSelectedNodes.length) {
+                        props.onSelectionChanged?.(selectedNodes);
+                    }
+                }
+            );
         }, [props]);
 
         return (
-            <Canvas
-                ref={ref}
-                className={circuitContainerStyles}
-                size={{ width: CANVAS_SIZE, height: CANVAS_SIZE }}
-                onMouseDown={onMouseDown}
-                onMouseMove={onMouseMove}
-                onMouseUp={onMouseUp}
-            >
-                <Nodes />
-                <Connections />
-                <Selection />
-            </Canvas>
+            <StoreContext.Provider value={{ store: props.store }}>
+                <Canvas
+                    ref={ref}
+                    className={cx(circuitContainerStyles, props.className)}
+                    size={{ width: CANVAS_SIZE, height: CANVAS_SIZE }}
+                    onMouseDown={onMouseDown}
+                    onMouseMove={onMouseMove}
+                    onMouseUp={onMouseUp}
+                >
+                    <Nodes />
+                    <Connections />
+                    <Selection />
+                </Canvas>
+            </StoreContext.Provider>
         );
     })
 );

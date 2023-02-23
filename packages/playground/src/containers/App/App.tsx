@@ -1,5 +1,5 @@
 import { Node, Input, Output } from '@nodl/core';
-import { Circuit } from '@nodl/react';
+import { Circuit, CircuitStore } from '@nodl/react';
 import * as React from 'react';
 import { combineLatest, map } from 'rxjs';
 import { z } from 'zod';
@@ -36,5 +36,27 @@ additionNode1.outputs.output.connect(additionNode3.inputs.a);
 additionNode2.outputs.output.connect(additionNode3.inputs.b);
 
 export const App = () => {
-    return <Circuit nodes={[additionNode1, additionNode2, additionNode3]} />;
+    const store = new CircuitStore();
+
+    React.useEffect(() => {
+        store.setNodes([
+            [additionNode1, { x: -220, y: 100 }],
+            [additionNode2, { x: -220, y: -100 }],
+            [additionNode3, { x: 220, y: 0 }]
+        ]);
+
+        return () => {
+            store.dispose();
+        };
+    }, []);
+
+    return (
+        <Circuit
+            store={store}
+            onConnection={c => console.log('NEW CONNECTION', c)}
+            onConnectionRemoval={c => console.log('REMOVED CONNECTION', c)}
+            onNodeRemoval={n => console.log('REMOVED NODE', n)}
+            onSelectionChanged={s => console.log('SELECTION CHANGED', s)}
+        />
+    );
 };

@@ -1,26 +1,29 @@
 import * as React from 'react';
 
-import { store as canvasStore } from '../../stores/CanvasStore/CanvasStore';
+import { CircuitStore } from '../../stores/CircuitStore/CircuitStore';
 import { KeyboardKey } from '../../types';
 import { KeyboardAction } from './useKeyboardActions.types';
 
-export const useKeyboardActions = () => {
+export const useKeyboardActions = (store: CircuitStore) => {
     const removeNodes = React.useCallback(() => {
-        for (const node of canvasStore.selectedNodes || []) {
+        for (const node of store.selectedNodes || []) {
             node.dispose();
+            store.removeNode(node.id);
         }
-    }, []);
+
+        store.selectNodes([]);
+    }, [store]);
 
     const selectAllNodes = React.useCallback(() => {
-        const nodes = Array.from(canvasStore.nodes.values() || []);
-        canvasStore.selectNodes(nodes);
-    }, []);
+        const nodes = Array.from(store.nodes.values() || []);
+        store.selectNodes(nodes);
+    }, [store]);
 
     const deselectAllNodes = React.useCallback(() => {
-        if (canvasStore.selectedNodes?.length) {
-            canvasStore.selectNodes([]);
+        if (store.selectedNodes?.length) {
+            store.selectNodes([]);
         }
-    }, []);
+    }, [store]);
 
     const actions: KeyboardAction[] = React.useMemo(
         () => [

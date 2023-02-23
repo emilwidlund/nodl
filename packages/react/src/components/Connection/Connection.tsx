@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
 import { NODE_POSITION_OFFSET_X } from '../../constants';
-import { store as canvasStore } from '../../stores/CanvasStore/CanvasStore';
+import { StoreContext } from '../../stores/CircuitStore/CircuitStore';
 import { fromCanvasCartesianPoint } from '../../utils/coordinates/coordinates';
 import { ConnectionProps } from './Connection.types';
 import { quadraticCurve } from './Connection.utils';
@@ -21,24 +21,21 @@ export const Connection = observer(<T,>({ output, connection }: ConnectionProps<
     const [pathString, setPathString] = React.useState('');
     const [fromPos, setFromPos] = React.useState(defaultPosition);
     const [toPos, setToPos] = React.useState(defaultPosition);
+    const { store } = React.useContext(StoreContext);
 
     const outputElement = connection
-        ? canvasStore.portElements.get(connection.from.id)
+        ? store.portElements.get(connection.from.id)
         : output
-        ? canvasStore.portElements.get(output.id)
+        ? store.portElements.get(output.id)
         : undefined;
-    const inputElement = connection && canvasStore.portElements.get(connection.to.id);
+    const inputElement = connection && store.portElements.get(connection.to.id);
 
     React.useEffect(() => {
         if (outputElement && inputElement) {
             return autorun(() => {
                 if (connection) {
-                    const fromPosition = canvasStore.nodePositions.get(
-                        canvasStore.getNodeByPortId(connection.from.id)?.id || ''
-                    );
-                    const toPosition = canvasStore.nodePositions.get(
-                        canvasStore.getNodeByPortId(connection.to.id)?.id || ''
-                    );
+                    const fromPosition = store.nodePositions.get(store.getNodeByPortId(connection.from.id)?.id || '');
+                    const toPosition = store.nodePositions.get(store.getNodeByPortId(connection.to.id)?.id || '');
 
                     if (!fromPosition || !toPosition) {
                         return;
@@ -86,7 +83,7 @@ export const Connection = observer(<T,>({ output, connection }: ConnectionProps<
     React.useEffect(() => {
         if (output && outputElement) {
             return autorun(() => {
-                const outputPosition = canvasStore.nodePositions.get(canvasStore.getNodeByPortId(output.id)?.id || '');
+                const outputPosition = store.nodePositions.get(store.getNodeByPortId(output.id)?.id || '');
 
                 if (!outputPosition) {
                     return;
@@ -108,9 +105,9 @@ export const Connection = observer(<T,>({ output, connection }: ConnectionProps<
                 };
 
                 setFromPos(newFromPos);
-                setToPos(canvasStore.mousePosition);
+                setToPos(store.mousePosition);
 
-                setPathString(quadraticCurve(newFromPos, canvasStore.mousePosition));
+                setPathString(quadraticCurve(newFromPos, store.mousePosition));
             });
         }
     }, [output, outputElement]);
@@ -123,7 +120,7 @@ export const Connection = observer(<T,>({ output, connection }: ConnectionProps<
 
     const selectedConnection =
         connection &&
-        canvasStore.selectedNodes?.flatMap(node => node.connections).includes(connection as NodlConnection<unknown>);
+        store.selectedNodes?.flatMap(node => node.connections).includes(connection as NodlConnection<unknown>);
     const strokeColor = selectedConnection || output ? '#1e62ff' : '#424763';
 
     return (

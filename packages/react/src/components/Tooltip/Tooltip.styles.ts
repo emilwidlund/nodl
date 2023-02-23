@@ -78,13 +78,13 @@ export const tooltipNodeWrapperStyles = (
     position: absolute;
     display: flex;
     flex-direction: row;
-    padding: 4px 8px;
+    padding: 6px 8px;
     border-radius: 6px;
     background-color: var(--tooltip-background-color);
     color: var(--text-light-color);
     font-size: var(--font-size-xxs);
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.12em;
     font-feature-settings: 'ss02' 1;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     z-index: 79;

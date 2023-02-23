@@ -64,8 +64,8 @@ export const nodeActionStyles = (color: string) => css`
     opacity: 1;
     transition: opacity 0.1s;
     margin-left: 6px;
-    width: 12px;
-    height: 12px;
+    width: 8px;
+    height: 8px;
     border-radius: 6px;
     background-color: ${color};
 

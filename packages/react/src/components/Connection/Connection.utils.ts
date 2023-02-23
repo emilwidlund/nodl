@@ -17,10 +17,7 @@ export const quadraticCurve = (start: ConnectionTargetPoint, end: ConnectionTarg
     let offsetX = offset;
     let offsetY = offset;
 
-    if (y4 - y1 < 0) {
-        offsetY = -offset;
-    }
-
+    offsetY = Math.min(Math.max((y4 - y1) / 2, -offset), offset);
     offsetX = Math.min(Math.max((x4 - x1) / 2, -offset), offset);
 
     const midX = (x4 - x1) / 2 + x1;

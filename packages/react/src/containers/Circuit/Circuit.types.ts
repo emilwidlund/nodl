@@ -1,5 +1,12 @@
-import { Node } from '@nodl/core';
+import { Connection, Node } from '@nodl/core';
+
+import { CircuitStore } from '../../stores/CircuitStore/CircuitStore';
 
 export type CircuitProps = {
-    nodes: Node[];
+    store: CircuitStore;
+    className?: string;
+    onNodeRemoval?(node: Node): void;
+    onConnection?(connection: Connection<unknown>): void;
+    onConnectionRemoval?(connection: Connection<unknown>): void;
+    onSelectionChanged?(nodes: Node[]): void;
 };

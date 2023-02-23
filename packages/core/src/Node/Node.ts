@@ -1,3 +1,4 @@
+import { action, computed, makeObservable, observable } from 'mobx';
 import { v4 as uuid } from 'uuid';
 
 import { Connection } from '../Connection/Connection';
@@ -16,6 +17,18 @@ export abstract class Node<TData extends NodeData = NodeData> {
     public outputs: Record<string, Output> = {};
     /** Arbitrary Data Store */
     public data: TData = {} as TData;
+
+    constructor() {
+        makeObservable(this, {
+            id: observable,
+            name: observable,
+            inputs: observable,
+            outputs: observable,
+            data: observable,
+            connections: computed,
+            dispose: action
+        });
+    }
 
     /** Associated connections */
     public get connections() {
