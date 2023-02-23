@@ -1,6 +1,4 @@
 /*eslint-env node*/
-
-const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 module.exports = env => {
@@ -24,17 +22,8 @@ module.exports = env => {
                 {
                     test: /\.tsx?$/,
                     loader: 'ts-loader'
-                },
-                {
-                    test: /\.ttf$/,
-                    type: 'asset/resource'
                 }
             ]
-        },
-        plugins: [
-            new CopyPlugin({
-                patterns: [{ from: 'src/assets', to: 'assets' }]
-            })
-        ]
+        }
     };
 };
