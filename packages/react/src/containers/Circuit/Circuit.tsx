@@ -18,7 +18,7 @@ const Nodes = observer(() => {
 
     return (
         <>
-            {Array.from(store.nodes || []).map(node => (
+            {store.nodes.map(node => (
                 <Node key={node.id} node={node} />
             ))}
         </>
@@ -37,7 +37,7 @@ const Connections = observer(() => {
 
     return (
         <svg ref={ref} id="connections" width="100%" height="100%" onClick={onClick}>
-            {Array.from(store.connections || []).map(connection => (
+            {store.connections.map(connection => (
                 <Connection key={connection.id} connection={connection} />
             ))}
 
