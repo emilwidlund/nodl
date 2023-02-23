@@ -5,7 +5,8 @@
     "main": "build/index.js",
     "private": true,
     "scripts": {
-        "test": "yarn workspaces run test"
+        "test": "yarn workspaces run test",
+        "build": "yarn workspaces run build"
     },
     "repository": {
         "type": "git",
@@ -31,6 +32,7 @@
     },
     "workspaces": [
         "packages/core",
-        "packages/react"
+        "packages/react",
+        "packages/playground"
     ]
 }

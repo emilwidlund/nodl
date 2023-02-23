@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "lib": ["es2021", "DOM"],
+        "target": "ES6",
+        "outDir": "build",
+        "strict": true,
+        "moduleResolution": "node",
+        "jsx": "react",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "downlevelIteration": true,
+        "resolveJsonModule": true,
+        "allowJs": true,
+        "checkJs": false
+    },
+    "include": ["./src"]
+}

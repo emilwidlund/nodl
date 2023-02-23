@@ -32,7 +32,7 @@ export const nodeHeaderWrapperStyles = (active: boolean) => css`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 12px;
+    padding: 14px 12px 12px;
     font-size: var(--font-size-xxs);
     font-weight: 500;
     background-color: var(--node-background);

@@ -3,6 +3,7 @@
     "version": "0.1.0",
     "description": "React implementation of the Nodl framework",
     "main": "build/index.js",
+    "types": "build/index.d.ts",
     "author": "Emil Widlund",
     "license": "MIT",
     "private": false,
@@ -10,7 +11,8 @@
         "build/*"
     ],
     "scripts": {
-        "build": "tsc",
+        "build": "webpack --mode=development --devtool=inline-source-map",
+        "build:prod": "webpack --mode=production",
         "test": "jest"
     },
     "repository": {
@@ -26,7 +28,6 @@
         "@emotion/css": "^11.10.5",
         "@nodl/core": "^0.1.1",
         "@types/react": "^18.0.26",
-        "@types/react-dom": "^18.0.10",
         "mobx": "^6.7.0",
         "mobx-react-lite": "^3.4.0",
         "react-draggable": "^4.4.5",
@@ -35,9 +36,14 @@
     "devDependencies": {
         "@types/jest": "^29.2.5",
         "@types/uuid": "^9.0.0",
+        "copy-webpack-plugin": "^11.0.0",
         "jest": "^29.3.1",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "ts-jest": "^29.0.3"
+        "ts-jest": "^29.0.3",
+        "ts-loader": "^9.4.2",
+        "webpack": "^5.75.0",
+        "webpack-cli": "^5.0.1"
+    },
+    "peerDependencies": {
+        "react": "^18.0.0"
     }
 }

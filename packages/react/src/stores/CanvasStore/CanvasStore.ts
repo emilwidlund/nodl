@@ -19,9 +19,9 @@ export class CanvasStore {
     /** Selected Nodes */
     public selectedNodes: Node[] = [];
     /** Draft Connection Source */
-    public draftConnectionSource?: Output;
+    public draftConnectionSource: Output | null = null;
     /** Selection bounds */
-    public selectionBounds?: Bounds;
+    public selectionBounds: Bounds | null = null;
     /** Mouse Position */
     public mousePosition: MousePosition = { x: 0, y: 0 };
 
@@ -37,6 +37,11 @@ export class CanvasStore {
     /** All associated connections */
     public get connections() {
         return Array.from(new Set(this.nodes.flatMap(node => node.connections)).values());
+    }
+
+    /** Sets the associated nodes */
+    public setNodes(nodes: Node[]) {
+        this.nodes = nodes;
     }
 
     /** Associates a given Node instance with an HTML Element */
@@ -60,7 +65,7 @@ export class CanvasStore {
     }
 
     /** Sets an Output as the current draft connection source */
-    public setDraftConnectionSource(source?: Output): void {
+    public setDraftConnectionSource(source: Output | null): void {
         this.draftConnectionSource = source;
     }
 
@@ -69,7 +74,7 @@ export class CanvasStore {
         if (this.draftConnectionSource) {
             const connection = this.draftConnectionSource.connect(target);
 
-            this.setDraftConnectionSource(undefined);
+            this.setDraftConnectionSource(null);
 
             return connection;
         }
@@ -81,13 +86,18 @@ export class CanvasStore {
     }
 
     /** Sets the selection bounds */
-    public setSelectionBounds(bounds?: Bounds): void {
+    public setSelectionBounds(bounds: Bounds | null): void {
         this.selectionBounds = bounds;
     }
 
     /** Sets the mouse position */
     public setMousePosition(mousePosition: MousePosition): void {
         this.mousePosition = mousePosition;
+    }
+
+    /** Sets a node's position */
+    public setNodePosition(node: Node, position: { x: number; y: number }) {
+        this.nodePositions.set(node.id, position);
     }
 
     /** Returns the node with the associated port */
@@ -116,9 +126,12 @@ export class CanvasStore {
                     if (nodeElement) {
                         const nodeRect = nodeElement.getBoundingClientRect();
 
+                        const nodePosition = this.nodePositions.get(node.id);
+
                         if (
+                            nodePosition &&
                             withinBounds(bounds, {
-                                ...fromCanvasCartesianPoint(node.data.position.x - NODE_CENTER, node.data.position.y),
+                                ...fromCanvasCartesianPoint(nodePosition.x - NODE_CENTER, nodePosition.y),
                                 width: nodeRect.width,
                                 height: nodeRect.height
                             })

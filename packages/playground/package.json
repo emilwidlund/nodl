@@ -1,0 +1,46 @@
+{
+    "name": "@nodl/playground",
+    "version": "0.1.0",
+    "description": "A basic nodl playground",
+    "main": "build/index.js",
+    "author": "Emil Widlund",
+    "license": "MIT",
+    "private": true,
+    "files": [
+        "build/*"
+    ],
+    "scripts": {
+        "build": "tsc",
+        "dev": "webpack serve",
+        "test": "jest"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/emilwidlund/nodl.git"
+    },
+    "keywords": [],
+    "bugs": {
+        "url": "https://github.com/emilwidlund/nodl/issues"
+    },
+    "homepage": "https://github.com/emilwidlund/nodl#readme",
+    "dependencies": {
+        "@emotion/css": "^11.7.1",
+        "@types/react": "^18.0.0",
+        "@types/react-dom": "^18.0.0",
+        "@nodl/core": "^0.1.2",
+        "@nodl/react": "^0.1.0",
+        "emotion": "^11.0.0",
+        "prettier": "^2.8.0",
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
+        "ts-loader": "^9.3.1",
+        "typescript": "^4.7.4",
+        "webpack": "5",
+        "webpack-cli": "^5.0.1",
+        "webpack-dev-server": "^4.11.1"
+    },
+    "devDependencies": {
+        "@types/node": "^18.7.18",
+        "copy-webpack-plugin": "^10.2.4"
+    }
+}

@@ -33,8 +33,12 @@ export const Connection = observer(<T,>({ output, connection }: ConnectionProps<
         if (outputElement && inputElement) {
             return autorun(() => {
                 if (connection) {
-                    const fromPosition = canvasStore.getNodeByPortId(connection.from.id)?.data.position;
-                    const toPosition = canvasStore.getNodeByPortId(connection.to.id)?.data.position;
+                    const fromPosition = canvasStore.nodePositions.get(
+                        canvasStore.getNodeByPortId(connection.from.id)?.id || ''
+                    );
+                    const toPosition = canvasStore.nodePositions.get(
+                        canvasStore.getNodeByPortId(connection.to.id)?.id || ''
+                    );
 
                     if (!fromPosition || !toPosition) {
                         return;
@@ -81,31 +85,33 @@ export const Connection = observer(<T,>({ output, connection }: ConnectionProps<
 
     React.useEffect(() => {
         if (output && outputElement) {
-            const outputPosition = canvasStore.getNodeByPortId(output.id)?.data.position;
+            return autorun(() => {
+                const outputPosition = canvasStore.nodePositions.get(canvasStore.getNodeByPortId(output.id)?.id || '');
 
-            if (!outputPosition) {
-                return;
-            }
+                if (!outputPosition) {
+                    return;
+                }
 
-            const outputCartesian = fromCanvasCartesianPoint(
-                outputPosition.x + NODE_POSITION_OFFSET_X,
-                outputPosition.y
-            );
+                const outputCartesian = fromCanvasCartesianPoint(
+                    outputPosition.x + NODE_POSITION_OFFSET_X,
+                    outputPosition.y
+                );
 
-            const outputPortPosition = {
-                x: outputCartesian.x,
-                y: outputCartesian.y + outputElement.offsetTop
-            };
+                const outputPortPosition = {
+                    x: outputCartesian.x,
+                    y: outputCartesian.y + outputElement.offsetTop
+                };
 
-            const newFromPos = {
-                x: outputPortPosition.x + OUTPUT_PORT_OFFSET_X,
-                y: outputPortPosition.y + OUTPUT_PORT_OFFSET_Y
-            };
+                const newFromPos = {
+                    x: outputPortPosition.x + OUTPUT_PORT_OFFSET_X,
+                    y: outputPortPosition.y + OUTPUT_PORT_OFFSET_Y
+                };
 
-            setFromPos(newFromPos);
-            setToPos(canvasStore.mousePosition);
+                setFromPos(newFromPos);
+                setToPos(canvasStore.mousePosition);
 
-            setPathString(quadraticCurve(newFromPos, canvasStore.mousePosition));
+                setPathString(quadraticCurve(newFromPos, canvasStore.mousePosition));
+            });
         }
     }, [output, outputElement]);
 
@@ -118,10 +124,7 @@ export const Connection = observer(<T,>({ output, connection }: ConnectionProps<
     const selectedConnection =
         connection &&
         canvasStore.selectedNodes?.flatMap(node => node.connections).includes(connection as NodlConnection<unknown>);
-    const strokeColor =
-        selectedConnection || output
-            ? getComputedStyle(document.documentElement).getPropertyValue('--accent-color')
-            : getComputedStyle(document.documentElement).getPropertyValue('--connection-color');
+    const strokeColor = selectedConnection || output ? '#1e62ff' : '#424763';
 
     return (
         <g>

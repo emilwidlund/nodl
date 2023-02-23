@@ -14,7 +14,7 @@ export const Port = observer(<T,>({ port }: PortProps<T>) => {
     const { onMouseEnter, onMouseLeave, isHovered } = useHover();
     const { onMouseEnter: onPortTypeEnter, onMouseLeave: onPortTypeLeave, isHovered: isPortTypeHovered } = useHover();
 
-    const isOutput = React.useMemo(() => port instanceof Output, [port]);
+    const isOutput = React.useMemo(() => port.constructor.name === 'Output', [port]);
     const tooltipPosition = React.useMemo(() => (isOutput ? TooltipPosition.RIGHT : TooltipPosition.LEFT), [isOutput]);
     const visuallyDisabled = React.useMemo(() => {
         const isOccupied = !isOutput && port.connected;
@@ -58,6 +58,7 @@ export const Port = observer(<T,>({ port }: PortProps<T>) => {
             for (const connection of connections) {
                 if (connection) {
                     connection.dispose();
+                    canvasStore.disconnect(connection);
                 }
             }
         }
@@ -91,7 +92,7 @@ export const Port = observer(<T,>({ port }: PortProps<T>) => {
                     onClick={onClick}
                 >
                     {port.connected && isPortTypeHovered && !visuallyDisabled ? (
-                        <span>CLOSE ME</span>
+                        <span>x</span>
                     ) : (
                         <span>{port.type.constructor.name.charAt(0).toUpperCase()}</span>
                     )}

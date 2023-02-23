@@ -9,6 +9,7 @@ import { useKeyboardActions } from '../../hooks/useKeyboardActions/useKeyboardAc
 import { store as canvasStore } from '../../stores/CanvasStore/CanvasStore';
 import { normalizeBounds } from '../../utils/bounds/bounds';
 import { circuitContainerStyles, circuitSelectionStyles } from './Circuit.styles';
+import { CircuitProps } from './Circuit.types';
 
 const Nodes = observer(() => {
     return (
@@ -47,7 +48,7 @@ const Selection = observer(() => {
 });
 
 export const Circuit = observer(
-    React.forwardRef<HTMLDivElement>((props, ref) => {
+    React.forwardRef<HTMLDivElement, CircuitProps>((props, ref) => {
         useKeyboardActions();
 
         const onMouseMove = React.useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -83,9 +84,17 @@ export const Circuit = observer(
         }, []);
 
         const onMouseUp = React.useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-            canvasStore.setDraftConnectionSource();
-            canvasStore.setSelectionBounds();
+            canvasStore.setDraftConnectionSource(null);
+            canvasStore.setSelectionBounds(null);
         }, []);
+
+        React.useEffect(() => {
+            canvasStore.setNodes(props.nodes);
+
+            for (const node of props.nodes) {
+                canvasStore.setNodePosition(node, { x: 0, y: 0 });
+            }
+        }, [props]);
 
         return (
             <Canvas

@@ -55,9 +55,9 @@ export const Node = observer(({ node, actions, windowComponent }: NodeProps) => 
             e.stopPropagation();
 
             for (const selectedNode of canvasStore.selectedNodes || []) {
-                canvasStore.nodePositions.set(node.id, {
-                    x: selectedNode.data.position.x + deltaX,
-                    y: selectedNode.data.position.y + -deltaY
+                canvasStore.setNodePosition(selectedNode, {
+                    x: (canvasStore.nodePositions.get(selectedNode.id)?.x || 0) + deltaX,
+                    y: (canvasStore.nodePositions.get(selectedNode.id)?.y || 0) + -deltaY
                 });
             }
         },
@@ -68,7 +68,7 @@ export const Node = observer(({ node, actions, windowComponent }: NodeProps) => 
         node.dispose();
     }, [node]);
 
-    const active = React.useMemo(() => canvasStore.selectedNodes?.indexOf(node) !== -1, [node]);
+    const active = canvasStore.selectedNodes?.indexOf(node) !== -1;
     const position = canvasStore.nodePositions.get(node.id) || { x: 0, y: 0 };
 
     return (
