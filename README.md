@@ -1,6 +1,8 @@
 # nodl
 
-A library for node-based applications. Leveraged by RxJS and Zod.
+A framework for node-based applications. Leveraged by RxJS and Zod.
+
+[View Demo](https://codesandbox.io/s/agitated-elgamal-txqqql?file=/src/App.js)
 
 ![Visual representation of a nodl](assets/nodl.png?raw=true)
 

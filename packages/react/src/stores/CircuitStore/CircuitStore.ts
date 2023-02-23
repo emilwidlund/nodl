@@ -37,7 +37,9 @@ export class CircuitStore {
 
     /** All associated connections */
     public get connections() {
-        return Array.from(new Set(this.nodes.flatMap(node => node.connections)).values());
+        return this.nodes
+            .flatMap(node => node.connections)
+            .filter((value, index, self) => self.indexOf(value) === index);
     }
 
     /** Sets the associated nodes */

@@ -1,6 +1,6 @@
 {
     "name": "@nodl/react",
-    "version": "0.1.8",
+    "version": "0.1.12",
     "description": "React implementation of the Nodl framework",
     "main": "build/index.js",
     "types": "build/index.d.ts",

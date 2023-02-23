@@ -4,6 +4,8 @@ A React-implementation of the Nodl framework.
 
 This library is powered by MobX under the hood; and may be observed by an external MobX-instance for UI reactivity.
 
+[View Demo](https://codesandbox.io/s/agitated-elgamal-txqqql?file=/src/App.js)
+
 ![Visual representation of nodl](../../assets/nodl.png?raw=true)
 
 ### Getting Started
@@ -52,21 +54,15 @@ Supports the following props:
 -   `onSelectionChanged?(nodes: Node[])` An optional callback which fires when selected nodes changes.
 
 ```typescript
+const store = new CircuitStore();
+
+store.setNodes([
+    [additionNode1, { x: -220, y: 100 }],
+    [additionNode2, { x: -220, y: -100 }],
+    [additionNode3, { x: 220, y: 0 }]
+]);
+
 export const App = () => {
-    const store = new CircuitStore();
-
-    React.useEffect(() => {
-        store.setNodes([
-            [additionNode1, { x: -220, y: 100 }],
-            [additionNode2, { x: -220, y: -100 }],
-            [additionNode3, { x: 220, y: 0 }]
-        ]);
-
-        return () => {
-            store.dispose();
-        };
-    }, []);
-
     return (
         <Circuit
             store={store}
@@ -135,21 +131,15 @@ const additionNode3 = new Addition();
 additionNode1.outputs.output.connect(additionNode3.inputs.a);
 additionNode2.outputs.output.connect(additionNode3.inputs.b);
 
+const store = new CircuitStore();
+
+store.setNodes([
+    [additionNode1, { x: -220, y: 100 }],
+    [additionNode2, { x: -220, y: -100 }],
+    [additionNode3, { x: 220, y: 0 }]
+]);
+
 export const App = () => {
-    const store = new CircuitStore();
-
-    React.useEffect(() => {
-        store.setNodes([
-            [additionNode1, { x: -220, y: 100 }],
-            [additionNode2, { x: -220, y: -100 }],
-            [additionNode3, { x: 220, y: 0 }]
-        ]);
-
-        return () => {
-            store.dispose();
-        };
-    }, []);
-
     return (
         <Circuit
             store={store}
