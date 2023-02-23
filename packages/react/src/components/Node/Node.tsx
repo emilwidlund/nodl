@@ -31,7 +31,6 @@ export const Node = observer(({ node, actions, windowComponent }: NodeProps) => 
 
             return () => {
                 store.removeNodeElement(node.id);
-                store.removeNodePosition(node.id);
             };
         }
     }, [ref]);

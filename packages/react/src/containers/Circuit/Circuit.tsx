@@ -18,7 +18,7 @@ const Nodes = observer(() => {
 
     return (
         <>
-            {Array.from(store.nodes.values() || []).map(node => (
+            {Array.from(store.nodes || []).map(node => (
                 <Node key={node.id} node={node} />
             ))}
         </>

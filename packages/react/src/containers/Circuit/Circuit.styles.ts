@@ -48,4 +48,14 @@ export const circuitContainerStyles = css`
 
     --system-red: #ff4444;
     --system-yellow: #ffdd00;
+
+    :root {
+        font-family: 'Inter', sans-serif;
+    }
+
+    @supports (font-variation-settings: normal) {
+        :root {
+            font-family: 'Inter var', sans-serif;
+        }
+    }
 `;

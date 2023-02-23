@@ -15,7 +15,7 @@ export const useKeyboardActions = (store: CircuitStore) => {
     }, [store]);
 
     const selectAllNodes = React.useCallback(() => {
-        const nodes = Array.from(store.nodes.values() || []);
+        const nodes = Array.from(store.nodes || []);
         store.selectNodes(nodes);
     }, [store]);
 
