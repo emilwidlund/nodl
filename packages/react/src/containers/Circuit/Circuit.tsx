@@ -37,7 +37,7 @@ const Connections = observer(() => {
 
     return (
         <svg ref={ref} id="connections" width="100%" height="100%" onClick={onClick}>
-            {Array.from(store.connections.values() || []).map(connection => (
+            {Array.from(store.connections || []).map(connection => (
                 <Connection key={connection.id} connection={connection} />
             ))}
 

@@ -1,6 +1,6 @@
 {
     "name": "@nodl/react",
-    "version": "0.1.5",
+    "version": "0.1.7",
     "description": "React implementation of the Nodl framework",
     "main": "build/index.js",
     "types": "build/index.d.ts",
@@ -13,6 +13,7 @@
     "scripts": {
         "build": "webpack --mode=development --devtool=inline-source-map",
         "build:prod": "webpack --mode=production --devtool=source-map",
+        "prepare": "yarn run build:prod",
         "test": "jest"
     },
     "repository": {

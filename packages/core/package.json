@@ -11,6 +11,7 @@
     ],
     "scripts": {
         "build": "tsc",
+        "prepare": "yarn run build",
         "test": "jest"
     },
     "repository": {
