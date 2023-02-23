@@ -4,7 +4,7 @@ A React-implementation of the Nodl framework.
 
 This library is powered by MobX under the hood; and may be observed by an external MobX-instance for UI reactivity.
 
-![Visual representation of nodl](assets/nodl.png?raw=true)
+![Visual representation of nodl](../../assets/nodl.png?raw=true)
 
 ### Getting Started
 

@@ -1,7 +1,5 @@
 # nodl
 
-_This repository is still in development, and not ready for consumption._
-
 A library for node-based applications. Leveraged by RxJS and Zod.
 
 ![Visual representation of a nodl](assets/nodl.png?raw=true)
@@ -18,8 +16,6 @@ The core implementation of the Nodl framework. Exposes utilities and functions t
 
 ### @nodl/react
 
-_This package is not yet functional_.
-
-A React implementation of the Nodl framework. Exposes copmonents, containers, hooks & utilities to render Nodl nodes & connections.
+A React implementation of the Nodl framework. Exposes components & utilities for rendering Nodl nodes & connections.
 
 [See package](packages/react)
