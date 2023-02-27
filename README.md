@@ -1,5 +1,7 @@
 # nodl
 
+[![Nodl CI](https://github.com/emilwidlund/nodl/actions/workflows/main.yaml/badge.svg)](https://github.com/emilwidlund/nodl/actions/workflows/main.yaml)
+
 A framework for node-based applications. Leveraged by RxJS and Zod.
 
 [View Demo](https://codesandbox.io/s/agitated-elgamal-txqqql?file=/src/App.js)
