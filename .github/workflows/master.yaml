@@ -1,4 +1,4 @@
-name: Alma CI
+name: Nodl CI
 
 on:
     push:
