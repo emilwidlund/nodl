@@ -18,12 +18,13 @@ export class Connection<T> extends Subject<T> {
     constructor(from: Output<T>, to: Input<T>) {
         super();
 
-        if (to.connected) {
-            throw new Error('Input is already connected');
-        }
-
         if (from.type !== to.type) {
             throw new Error('Input type is incompatible with Output type');
+        }
+
+        if (to.connected) {
+            /** Remove previous connection gracefully */
+            to.connection?.dispose();
         }
 
         this.from = from;
