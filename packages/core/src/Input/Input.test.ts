@@ -11,18 +11,18 @@ describe('Input', () => {
         expect(input.defaultValue).toEqual(0);
         expect(input.value).toEqual(0);
         expect(input.connected).toBeFalsy();
-        expect(input.connection).toBeUndefined();
+        expect(input.connection).toBeNull();
     });
 
     it('should store connection', () => {
         const addition = new Addition();
         const addition2 = new Addition();
 
-        expect(addition2.inputs.a.connection).toBeUndefined();
+        expect(addition2.inputs.a.connection).toBeNull();
         const connection = addition.outputs.output.connect(addition2.inputs.a);
         expect(addition2.inputs.a.connection).toEqual(connection);
         connection.dispose();
-        expect(addition2.inputs.a.connection).toBeUndefined();
+        expect(addition2.inputs.a.connection).toBeNull();
     });
 
     it('should have a working connected flag', () => {
