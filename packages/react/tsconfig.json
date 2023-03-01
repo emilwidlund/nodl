@@ -11,6 +11,6 @@
         "declaration": true,
         "jsx": "react"
     },
-    "include": ["./src"],
+    "include": ["./src", "./jest-setup.ts"],
     "exclude": ["./src/**/*.spec.ts", "./src/**/*.test.ts"]
 }
