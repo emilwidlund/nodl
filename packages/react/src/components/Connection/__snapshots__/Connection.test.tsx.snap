@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Connection should render correctly 1`] = `
+<DocumentFragment>
+  <svg
+    height="2000"
+    width="2000"
+  >
+    <g>
+      <path
+        class="connector"
+        d="
+        M4730,4912 
+        L4974,4912 
+        Q4994,4912 4994,4892 
+        L4994,4732
+        Q4994,4712 5014,4712
+        L5258,4712
+    "
+        fill="none"
+        stroke="#424763"
+        stroke-width="2"
+      />
+      <path
+        class="port"
+        d="M4730,4912,4732,4912"
+        fill="none"
+        stroke="#424763"
+        stroke-width="8"
+      />
+      <path
+        class="port"
+        d="M5256,4712,5258,4712"
+        fill="none"
+        stroke="#424763"
+        stroke-width="8"
+      />
+    </g>
+  </svg>
+</DocumentFragment>
+`;
