@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import { Input, Output } from '@nodl/core';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
@@ -68,7 +69,7 @@ export const Port = observer(<T,>({ port }: PortProps<T>) => {
         <Tooltip text={portTypeName} position={tooltipPosition}>
             <div
                 ref={ref}
-                className={portWrapperStyles(
+                css={portWrapperStyles(
                     port.connected ||
                         (!store.draftConnectionSource && isHovered) ||
                         (!!store.draftConnectionSource && !visuallyDisabled),
@@ -81,7 +82,7 @@ export const Port = observer(<T,>({ port }: PortProps<T>) => {
                 onMouseDown={onMouseDown}
             >
                 <div
-                    className={portTypeStyles(
+                    css={portTypeStyles(
                         port.connected,
                         isOutput,
                         isHovered && !visuallyDisabled,

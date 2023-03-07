@@ -7,16 +7,22 @@ module.exports = env => {
         output: {
             filename: 'index.js',
             path: path.resolve(__dirname, 'build'),
-            libraryTarget: 'umd'
+            libraryTarget: 'umd',
+            globalObject: 'this'
         },
         resolve: {
-            extensions: ['.ts', '.tsx', '.js', '.json']
+            extensions: ['.ts', '.tsx', '.js', '.json'],
+            fallback: {
+                stream: false,
+                buffer: false
+            }
         },
         mode: 'development',
         externals: {
             react: 'commonjs react',
             'react-dom': 'commonjs react-dom'
         },
+        target: 'node',
         module: {
             rules: [
                 {

@@ -1,4 +1,4 @@
-import { cx } from '@emotion/css';
+/** @jsxImportSource @emotion/react */
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
@@ -26,10 +26,11 @@ export const Canvas = observer(
             }, []);
 
             return (
-                <div ref={scrollRef} className={cx(canvasWrapperStyles, className)}>
+                <div ref={scrollRef} css={canvasWrapperStyles} className={className}>
                     <div
                         ref={ref}
-                        className={cx(canvasContentStyles(size), 'canvas')}
+                        css={canvasContentStyles(size)}
+                        className="canvas"
                         children={children}
                         onMouseMove={onMouseMove}
                         onMouseDown={onMouseDown}

@@ -1,4 +1,4 @@
-import { cx } from '@emotion/css';
+/** @jsxImportSource @emotion/react */
 import * as React from 'react';
 
 import { useHover } from '../../hooks/useHover/useHover';
@@ -16,7 +16,7 @@ const TooltipNode = ({ text, position, offset }: ITooltipNodeProps) => {
     }, []);
 
     return (
-        <span ref={ref} className={tooltipNodeWrapperStyles(position, dimensions, offset)}>
+        <span ref={ref} css={tooltipNodeWrapperStyles(position, dimensions, offset)}>
             {text}
         </span>
     );
@@ -26,7 +26,7 @@ export const Tooltip = ({ children, className, ...tooltipNodeProps }: ITooltipPr
     const { onMouseEnter, onMouseLeave, isHovered } = useHover();
 
     return (
-        <div className={cx(tooltipWrapperStyles, className)} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+        <div css={tooltipWrapperStyles} className={className} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
             <div>{children}</div>
             {isHovered && <TooltipNode {...tooltipNodeProps} />}
         </div>
