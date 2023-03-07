@@ -1,4 +1,4 @@
-import { cx } from '@emotion/css';
+/** @jsxImportSource @emotion/react */
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 import Draggable, { DraggableEventHandler } from 'react-draggable';
@@ -82,25 +82,25 @@ export const Node = observer(({ node, actions, windowComponent }: NodeProps) => 
         >
             <div
                 ref={ref}
-                className={nodeWrapperStyles(active)}
+                css={nodeWrapperStyles(active)}
                 onClick={handleOnClick}
                 onFocus={handleOnFocus}
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
                 tabIndex={0}
             >
-                <div className={cx(nodeHeaderWrapperStyles(active), 'handle')}>
-                    <div className={nodeHeaderNameWrapperStyle}>
+                <div css={nodeHeaderWrapperStyles(active)} className={'handle'}>
+                    <div css={nodeHeaderNameWrapperStyle}>
                         <span>{node.name}</span>
                     </div>
-                    <div className={nodeHeaderActionsStyles(isHovered || active)}>
+                    <div css={nodeHeaderActionsStyles(isHovered || active)}>
                         <NodeAction color="#ff4444" onClick={handleRemoveNode} />
                     </div>
                 </div>
                 {typeof windowComponent === 'function' ? (
-                    <div className={nodeWindowWrapperStyles} children={windowComponent(node)} />
+                    <div css={nodeWindowWrapperStyles} children={windowComponent(node)} />
                 ) : undefined}
-                <div className={nodeContentWrapperStyles}>
+                <div css={nodeContentWrapperStyles}>
                     <NodePorts ports={Object.values(node.inputs)} />
                     <NodePorts ports={Object.values(node.outputs)} isOutputWrapper={true} />
                 </div>
@@ -110,12 +110,12 @@ export const Node = observer(({ node, actions, windowComponent }: NodeProps) => 
 });
 
 const NodeAction = ({ color = '#fff', onClick }: NodeActionProps) => {
-    return <div className={nodeActionStyles(color)} color={color} onClick={onClick} />;
+    return <div css={nodeActionStyles(color)} color={color} onClick={onClick} />;
 };
 
 const NodePorts = ({ ports, isOutputWrapper }: NodePortsProps) => {
     return (
-        <div className={nodePortsWrapperStyles(isOutputWrapper)}>
+        <div css={nodePortsWrapperStyles(isOutputWrapper)}>
             {ports.map(port => (
                 <Port key={port.id} port={port} />
             ))}

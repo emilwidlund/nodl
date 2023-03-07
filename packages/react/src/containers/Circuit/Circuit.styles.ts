@@ -1,4 +1,4 @@
-import { css } from '@emotion/css';
+import { css } from '@emotion/react';
 
 import { Bounds } from '../../utils/bounds/bounds.types';
 

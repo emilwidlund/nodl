@@ -1,4 +1,4 @@
-import { cx } from '@emotion/css';
+/** @jsxImportSource @emotion/react */
 import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
@@ -49,9 +49,7 @@ const Connections = observer(() => {
 const Selection = observer(() => {
     const { store } = React.useContext(StoreContext);
 
-    return store.selectionBounds ? (
-        <div className={circuitSelectionStyles(normalizeBounds(store.selectionBounds))} />
-    ) : null;
+    return store.selectionBounds ? <div css={circuitSelectionStyles(normalizeBounds(store.selectionBounds))} /> : null;
 });
 
 export const Circuit = observer(
@@ -147,7 +145,8 @@ export const Circuit = observer(
             <StoreContext.Provider value={{ store: props.store }}>
                 <Canvas
                     ref={ref}
-                    className={cx(circuitContainerStyles, props.className)}
+                    className={props.className}
+                    css={circuitContainerStyles}
                     size={{ width: CANVAS_SIZE, height: CANVAS_SIZE }}
                     onMouseDown={onMouseDown}
                     onMouseMove={onMouseMove}

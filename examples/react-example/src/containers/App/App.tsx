@@ -1,10 +1,9 @@
+import { Global } from '@emotion/react';
 import { Node, Input, Output } from '@nodl/core';
 import { Circuit, CircuitStore } from '@nodl/react';
 import * as React from 'react';
 import { combineLatest, map } from 'rxjs';
 import { z } from 'zod';
-
-import './App.styles';
 
 /** Declare a zod schema for value validation */
 const NumberSchema = z.number();
@@ -51,12 +50,22 @@ export const App = () => {
     }, []);
 
     return (
-        <Circuit
-            store={store}
-            onConnection={c => console.log('NEW CONNECTION', c)}
-            onConnectionRemoval={c => console.log('REMOVED CONNECTION', c)}
-            onNodeRemoval={n => console.log('REMOVED NODE', n)}
-            onSelectionChanged={s => console.log('SELECTION CHANGED', s)}
-        />
+        <>
+            <Global
+                styles={{
+                    body: {
+                        margin: 0,
+                        backgroundColor: '#1c1e2a'
+                    }
+                }}
+            />
+            <Circuit
+                store={store}
+                onConnection={c => console.log('NEW CONNECTION', c)}
+                onConnectionRemoval={c => console.log('REMOVED CONNECTION', c)}
+                onNodeRemoval={n => console.log('REMOVED NODE', n)}
+                onSelectionChanged={s => console.log('SELECTION CHANGED', s)}
+            />
+        </>
     );
 };

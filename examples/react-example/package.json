@@ -1,7 +1,6 @@
 {
-    "name": "@nodl/playground",
+    "name": "@nodl/react-example",
     "version": "0.1.0",
-    "description": "A basic nodl playground",
     "main": "build/index.js",
     "author": "Emil Widlund",
     "license": "MIT",
@@ -24,11 +23,11 @@
     },
     "homepage": "https://github.com/emilwidlund/nodl#readme",
     "dependencies": {
-        "@emotion/css": "^11.7.1",
-        "@types/react": "^18.0.0",
-        "@types/react-dom": "^18.0.0",
+        "@emotion/react": "^11.10.6",
         "@nodl/core": "^0.1.2",
         "@nodl/react": "^0.1.0",
+        "@types/react": "^18.0.0",
+        "@types/react-dom": "^18.0.0",
         "emotion": "^11.0.0",
         "prettier": "^2.8.0",
         "react": "^18.0.0",

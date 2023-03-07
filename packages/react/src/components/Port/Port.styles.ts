@@ -1,4 +1,4 @@
-import { css } from '@emotion/css';
+import { css } from '@emotion/react';
 
 export const portWrapperStyles = (highlighted: boolean, reverseDirection: boolean, disabled: boolean) => css`
     position: relative;
