@@ -24,7 +24,7 @@ exports[`Canvas should render correctly 1`] = `
     class="emotion-0"
   >
     <div
-      class="emotion-1 canvas"
+      class="canvas emotion-1"
     />
   </div>
 </DocumentFragment>
