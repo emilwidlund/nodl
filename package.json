@@ -34,7 +34,6 @@
     },
     "workspaces": [
         "packages/core",
-        "packages/react",
-        "packages/playground"
+        "packages/react"
     ]
 }
