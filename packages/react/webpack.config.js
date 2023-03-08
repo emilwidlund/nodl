@@ -22,7 +22,6 @@ module.exports = env => {
             react: 'commonjs react',
             'react-dom': 'commonjs react-dom'
         },
-        target: 'node',
         module: {
             rules: [
                 {
