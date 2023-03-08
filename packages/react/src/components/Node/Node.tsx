@@ -76,6 +76,7 @@ export const Node = observer(({ node, actions, windowComponent }: NodeProps) => 
 
     return (
         <Draggable
+            nodeRef={ref}
             position={fromCanvasCartesianPoint(position.x - NODE_POSITION_OFFSET_X, position.y)}
             onDrag={handleOnDrag}
             handle=".handle"
