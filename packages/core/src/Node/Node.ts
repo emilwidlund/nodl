@@ -12,9 +12,9 @@ export abstract class Node<TData extends NodeData = NodeData> {
     /** Node Name */
     public name: string = this.constructor.name;
     /** Node Inputs */
-    public inputs: Record<string, Input> = {};
+    public abstract inputs: Record<string, Input>;
     /** Node Outputs */
-    public outputs: Record<string, Output> = {};
+    public abstract outputs: Record<string, Output>;
     /** Arbitrary Data Store */
     public data: TData = {} as TData;
 
@@ -22,8 +22,6 @@ export abstract class Node<TData extends NodeData = NodeData> {
         makeObservable(this, {
             id: observable,
             name: observable,
-            inputs: observable,
-            outputs: observable,
             data: observable,
             connections: computed,
             dispose: action

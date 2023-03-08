@@ -22,7 +22,7 @@ export class Output<TValue = any> extends ReplaySubject<TValue> {
     public connections: Connection<TValue>[];
 
     constructor(props: IOutputProps<TValue>) {
-        super();
+        super(1);
 
         this.name = props.name || 'Untitled';
         this.type = props.type;
