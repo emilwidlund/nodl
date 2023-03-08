@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
-import Draggable, { DraggableEventHandler } from 'react-draggable';
+import Draggable, { DraggableEventHandler, DraggableCore } from 'react-draggable';
 
 import { NODE_POSITION_OFFSET_X } from '../../constants';
 import { useHover } from '../../hooks/useHover/useHover';
@@ -76,6 +76,7 @@ export const Node = observer(({ node, actions, windowComponent }: NodeProps) => 
 
     return (
         <Draggable
+            ref={ref}
             position={fromCanvasCartesianPoint(position.x - NODE_POSITION_OFFSET_X, position.y)}
             onDrag={handleOnDrag}
             handle=".handle"
