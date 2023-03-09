@@ -1,12 +1,12 @@
 import { Global } from '@emotion/react';
-import { Node, Input, Output } from '@nodl/core';
+import { Node, Input, Output, schema } from '@nodl/core';
 import { Circuit, CircuitStore } from '@nodl/react';
 import * as React from 'react';
 import { combineLatest, map } from 'rxjs';
 import { z } from 'zod';
 
 /** Declare a zod schema for value validation */
-const NumberSchema = z.number();
+const NumberSchema = schema(z.number());
 
 class Addition extends Node {
     inputs = {

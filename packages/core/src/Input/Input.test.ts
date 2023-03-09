@@ -7,7 +7,7 @@ describe('Input', () => {
         const input = addition.inputs.a;
         expect(typeof input.id).toEqual('string');
         expect(input.name).toEqual('A');
-        expect(input.type).toEqual({ name: 'Number', validator: NumberSchema });
+        expect(input.type).toEqual(NumberSchema);
         expect(input.defaultValue).toEqual(0);
         expect(input.value).toEqual(0);
         expect(input.connected).toBeFalsy();
