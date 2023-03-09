@@ -1,7 +1,7 @@
-import { z } from 'zod';
+import { Schema } from '../Schema/Schema.types';
 
 export interface IInputProps<T> {
     name?: string;
-    type: z.Schema;
+    type: Schema;
     defaultValue: T;
 }

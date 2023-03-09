@@ -1,11 +1,11 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { v4 as uuid } from 'uuid';
-import { z } from 'zod';
 
 import { Connection } from '../Connection/Connection';
 import { Input } from '../Input/Input';
 import { IOutputProps } from '../Output/Output.types';
+import { Schema } from '../Schema/Schema.types';
 
 export class Output<TValue = any> extends ReplaySubject<TValue> {
     /** Identifier */
@@ -13,7 +13,7 @@ export class Output<TValue = any> extends ReplaySubject<TValue> {
     /** Name */
     public name: string;
     /** Type */
-    public type: z.Schema;
+    public type: Schema;
     /** Compute operation */
     public observable: Observable<TValue>;
     /** Value Operator subscription */

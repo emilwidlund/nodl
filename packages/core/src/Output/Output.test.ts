@@ -9,7 +9,7 @@ describe('Output', () => {
         const output = addition.outputs.output;
         expect(typeof output.id).toEqual('string');
         expect(output.name).toEqual('Output');
-        expect(output.type).toEqual(NumberSchema);
+        expect(output.type).toEqual({ name: 'Number', validator: NumberSchema });
         expect(output.observable instanceof Observable).toBeTruthy();
         expect(output.subscription).toBeDefined();
         expect(output.connected).toBeFalsy();

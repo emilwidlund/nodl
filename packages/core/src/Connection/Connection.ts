@@ -18,7 +18,8 @@ export class Connection<T> extends Subject<T> {
     constructor(from: Output<T>, to: Input<T>) {
         super();
 
-        if (from.type !== to.type) {
+        /** Check zod schema validators */
+        if (from.type.name !== to.type.name) {
             throw new Error('Input type is incompatible with Output type');
         }
 
@@ -30,7 +31,14 @@ export class Connection<T> extends Subject<T> {
         this.from = from;
         this.to = to;
 
-        this.subscription = this.from.subscribe(this.to);
+        this.subscription = this.from.subscribe(value => {
+            try {
+                this.to.type.validator.parse(value);
+                this.to.next(value);
+            } catch (err) {
+                throw new Error('Received a value with an incompatible type');
+            }
+        });
 
         this.from.connections.push(this);
         this.to.connection = this;

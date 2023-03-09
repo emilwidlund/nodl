@@ -1,9 +1,9 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 import { BehaviorSubject } from 'rxjs';
 import { v4 as uuid } from 'uuid';
-import { z } from 'zod';
 
 import { Connection } from '../Connection/Connection';
+import { Schema } from '../Schema/Schema.types';
 import { IInputProps } from './Input.types';
 
 export class Input<TValue = any> extends BehaviorSubject<TValue> {
@@ -12,7 +12,7 @@ export class Input<TValue = any> extends BehaviorSubject<TValue> {
     /** Name */
     public name: string;
     /** Type */
-    public type: z.Schema;
+    public type: Schema;
     /** Default Value */
     public defaultValue: TValue;
     /** Associated Connection */
