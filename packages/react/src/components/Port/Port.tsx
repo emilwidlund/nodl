@@ -63,10 +63,8 @@ export const Port = observer(<T,>({ port }: PortProps<T>) => {
         }
     }, [port]);
 
-    const portTypeName = React.useMemo(() => port.type.constructor.name.toUpperCase().replace('ZOD', ''), [port]);
-
     return (
-        <Tooltip text={portTypeName} position={tooltipPosition}>
+        <Tooltip text={port.type.name} position={tooltipPosition}>
             <div
                 ref={ref}
                 css={portWrapperStyles(
@@ -95,7 +93,7 @@ export const Port = observer(<T,>({ port }: PortProps<T>) => {
                     {port.connected && isPortTypeHovered && !visuallyDisabled ? (
                         <span>x</span>
                     ) : (
-                        <span>{portTypeName.charAt(0)}</span>
+                        <span>{port.type.name.charAt(0)}</span>
                     )}
                 </div>
                 <span>{port.name}</span>

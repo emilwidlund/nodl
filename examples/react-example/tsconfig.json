@@ -10,8 +10,10 @@
         "emitDecoratorMetadata": true,
         "downlevelIteration": true,
         "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
         "allowJs": true,
-        "checkJs": false
+        "checkJs": false,
+        "skipLibCheck": true
     },
     "include": ["./src"]
 }

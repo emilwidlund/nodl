@@ -1,7 +1,7 @@
 {
     "name": "nodl",
     "version": "0.1.0",
-    "description": "A React-library for building node-based applications.",
+    "description": "A library for building node-based applications.",
     "main": "build/index.js",
     "private": true,
     "scripts": {
@@ -34,6 +34,7 @@
     },
     "workspaces": [
         "packages/core",
-        "packages/react"
+        "packages/react",
+        "examples/react-example"
     ]
 }

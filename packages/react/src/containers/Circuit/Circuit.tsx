@@ -11,15 +11,15 @@ import { useKeyboardActions } from '../../hooks/useKeyboardActions/useKeyboardAc
 import { StoreContext } from '../../stores/CircuitStore/CircuitStore';
 import { normalizeBounds } from '../../utils/bounds/bounds';
 import { circuitContainerStyles, circuitSelectionStyles } from './Circuit.styles';
-import { CircuitProps } from './Circuit.types';
+import { CircuitProps, NodeWindowResolver } from './Circuit.types';
 
-const Nodes = observer(() => {
+const Nodes = observer(({ windowResolver }: { windowResolver?: NodeWindowResolver }) => {
     const { store } = React.useContext(StoreContext);
 
     return (
         <>
             {store.nodes.map(node => (
-                <Node key={node.id} node={node} />
+                <Node key={node.id} node={node} window={windowResolver?.(node)} />
             ))}
         </>
     );
@@ -134,9 +134,7 @@ export const Circuit = observer(
             return reaction(
                 () => props.store.selectedNodes,
                 (selectedNodes, prevSelectedNodes) => {
-                    if (selectedNodes.length !== prevSelectedNodes.length) {
-                        props.onSelectionChanged?.(selectedNodes);
-                    }
+                    props.onSelectionChanged?.(selectedNodes);
                 }
             );
         }, [props]);
@@ -152,7 +150,7 @@ export const Circuit = observer(
                     onMouseMove={onMouseMove}
                     onMouseUp={onMouseUp}
                 >
-                    <Nodes />
+                    <Nodes windowResolver={props.nodeWindowResolver} />
                     <Connections />
                     <Selection />
                 </Canvas>

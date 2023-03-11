@@ -20,7 +20,7 @@ import {
 } from './Node.styles';
 import { NodeActionProps, NodePortsProps, NodeProps } from './Node.types';
 
-export const Node = observer(({ node, actions, windowComponent }: NodeProps) => {
+export const Node = observer(({ node, actions, window }: NodeProps) => {
     const ref = React.useRef<HTMLDivElement>(null);
     const { onMouseEnter, onMouseLeave, isHovered } = useHover();
     const { store } = React.useContext(StoreContext);
@@ -98,9 +98,7 @@ export const Node = observer(({ node, actions, windowComponent }: NodeProps) => 
                         <NodeAction color="#ff4444" onClick={handleRemoveNode} />
                     </div>
                 </div>
-                {typeof windowComponent === 'function' ? (
-                    <div css={nodeWindowWrapperStyles} children={windowComponent(node)} />
-                ) : undefined}
+                {window ? <div css={nodeWindowWrapperStyles} children={window} /> : undefined}
                 <div css={nodeContentWrapperStyles}>
                     <NodePorts ports={Object.values(node.inputs)} />
                     <NodePorts ports={Object.values(node.outputs)} isOutputWrapper={true} />
