@@ -3,7 +3,7 @@ import { DraggableProps } from 'react-draggable';
 
 export type NodeProps = {
     node: Node;
-    windowComponent?: (node: Node) => JSX.Element;
+    window?: JSX.Element;
     actions?: NodeActionProps[];
     className?: string;
     disabled?: boolean;

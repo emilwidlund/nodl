@@ -1,8 +1,9 @@
 import { Observable } from 'rxjs';
-import { z } from 'zod';
+
+import { Schema } from '../Schema/Schema.types';
 
 export interface IOutputProps<T> {
     name?: string;
-    type: z.Schema;
+    type: Schema;
     observable: Observable<T>;
 }

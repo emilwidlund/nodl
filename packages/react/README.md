@@ -48,6 +48,7 @@ Supports the following props:
 
 -   `store: CircuitStore` A Circuit store which holds the internal circuit state along with associated nodes.
 -   `className?: string` An optional className to assign the Circuit.
+-   `nodeWindowResolver?: (node: Node) => JSX.Element` An optional function which can be used to render a custom "window" for given nodes.
 -   `onConnection?(connection: Connection<unknown>)` An optional callback which fires when new connections are made.
 -   `onConnectionRemoval?(connection: Connection<unknown>)` An optional callback which fires when connections are removed.
 -   `onNodeRemoval?(node: Node)` An optional callback which fires when nodes are removed.
@@ -96,14 +97,14 @@ The manager which is responsible for the circuit state.
 ### Example
 
 ```typescript
-import { Node, Input, Output } from '@nodl/core';
+import { Node, Input, Output, schema } from '@nodl/core';
 import { Circuit, CircuitStore } from '@nodl/react';
 import * as React from 'react';
 import { combineLatest, map } from 'rxjs';
 import { z } from 'zod';
 
 /** Declare a zod schema for value validation */
-const NumberSchema = z.number();
+const NumberSchema = schema(z.number());
 
 class Addition extends Node {
     inputs = {

@@ -1,47 +1,37 @@
 import { Global } from '@emotion/react';
-import { Node, Input, Output } from '@nodl/core';
 import { Circuit, CircuitStore } from '@nodl/react';
+import * as color from 'color';
 import * as React from 'react';
-import { combineLatest, map } from 'rxjs';
-import { z } from 'zod';
 
-/** Declare a zod schema for value validation */
-const NumberSchema = z.number();
+import { useNodeControls } from '../../hooks/useNodeControls';
+import { useNodeWindowResolver } from '../../hooks/useNodeWindowResolver';
+import { Color } from '../../nodes/ColorNode/ColorNode';
+import { Mix } from '../../nodes/MixNode/MixNode';
 
-class Addition extends Node {
-    inputs = {
-        a: new Input({ name: 'A', type: NumberSchema, defaultValue: 0 }),
-        b: new Input({ name: 'B', type: NumberSchema, defaultValue: 0 })
-    };
-
-    outputs = {
-        output: new Output({
-            name: 'Output',
-            type: NumberSchema,
-            observable: combineLatest([this.inputs.a, this.inputs.b]).pipe(
-                map(inputs => inputs.reduce((sum, value) => sum + value), 0)
-            )
-        })
-    };
-}
-
-/** Declare 3 addition nodes */
-const additionNode1 = new Addition();
-const additionNode2 = new Addition();
-const additionNode3 = new Addition();
+/** Declare 3 nodes */
+const colorNode = new Color();
+const colorNode2 = new Color();
+const mixNode = new Mix();
 
 /** Connect them together */
-additionNode1.outputs.output.connect(additionNode3.inputs.a);
-additionNode2.outputs.output.connect(additionNode3.inputs.b);
+colorNode.outputs.rgb.connect(mixNode.inputs.a);
+colorNode2.outputs.rgb.connect(mixNode.inputs.b);
+
+/** Push color node's initial values */
+colorNode.inputs.color.next(color('#00ffa2'));
+colorNode2.inputs.color.next(color('#ff0048'));
+
+const store = new CircuitStore();
 
 export const App = () => {
-    const store = new CircuitStore();
+    const nodeWindowResolver = useNodeWindowResolver();
+    const { onSelection } = useNodeControls();
 
     React.useEffect(() => {
         store.setNodes([
-            [additionNode1, { x: -220, y: 100 }],
-            [additionNode2, { x: -220, y: -100 }],
-            [additionNode3, { x: 220, y: 0 }]
+            [colorNode, { x: -220, y: 400 }],
+            [colorNode2, { x: -220, y: 0 }],
+            [mixNode, { x: 220, y: 200 }]
         ]);
 
         return () => {
@@ -59,13 +49,7 @@ export const App = () => {
                     }
                 }}
             />
-            <Circuit
-                store={store}
-                onConnection={c => console.log('NEW CONNECTION', c)}
-                onConnectionRemoval={c => console.log('REMOVED CONNECTION', c)}
-                onNodeRemoval={n => console.log('REMOVED NODE', n)}
-                onSelectionChanged={s => console.log('SELECTION CHANGED', s)}
-            />
+            <Circuit store={store} nodeWindowResolver={nodeWindowResolver} onSelectionChanged={onSelection} />
         </>
     );
 };

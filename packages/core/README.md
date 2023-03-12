@@ -42,11 +42,11 @@ An Addition Node may for instance have two inputs and a single output, which com
 
 ```typescript
 import { z } from 'zod';
-import { Node, Input, Output } from '@nodl/core';
+import { Node, Input, Output, schema } from '@nodl/core';
 import { combineLatest, map } from 'rxjs';
 
 /** Declare a zod schema for value validation */
-const NumberSchema = z.number();
+const NumberSchema = schema(z.number());
 
 class Addition extends Node {
     inputs = {
@@ -70,11 +70,11 @@ class Addition extends Node {
 
 ```typescript
 import { z } from 'zod';
-import { Node, Input, Output } from '@nodl/core';
+import { Node, Input, Output, schema } from '@nodl/core';
 import { combineLatest, map } from 'rxjs';
 
 /** Declare a zod schema for value validation */
-const NumberSchema = z.number();
+const NumberSchema = schema(z.number());
 
 class Addition extends Node {
     inputs = {

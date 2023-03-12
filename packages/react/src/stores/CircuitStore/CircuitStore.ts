@@ -1,4 +1,5 @@
 import { Connection, Input, Node, Output } from '@nodl/core';
+import { isEmpty, isEqual, xorWith } from 'lodash';
 import { autorun, IReactionDisposer, makeAutoObservable } from 'mobx';
 import { createContext } from 'react';
 
@@ -159,7 +160,9 @@ export class CircuitStore {
                     }
                 }
 
-                this.selectNodes(selectionCandidates);
+                if (!isEmpty(xorWith(this.selectedNodes, selectionCandidates, isEqual))) {
+                    this.selectNodes(selectionCandidates);
+                }
             }
         });
     }

@@ -3,9 +3,10 @@ import { z } from 'zod';
 
 import { Input } from '../Input/Input';
 import { Output } from '../Output/Output';
+import { schema } from '../Schema/Schema';
 import { Node } from './Node';
 
-export const NumberSchema = z.number();
+export const NumberSchema = schema(z.number());
 
 export class Addition extends Node {
     inputs = {

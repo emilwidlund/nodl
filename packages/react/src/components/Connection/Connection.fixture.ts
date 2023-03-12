@@ -1,8 +1,8 @@
-import { Input, Output, Node } from '@nodl/core';
+import { Input, Output, Node, schema } from '@nodl/core';
 import { combineLatest, map } from 'rxjs';
 import { z } from 'zod';
 
-export const NumberSchema = z.number();
+export const NumberSchema = schema(z.number());
 
 export class Addition extends Node {
     inputs = {
