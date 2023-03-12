@@ -48,6 +48,7 @@ Supports the following props:
 
 -   `store: CircuitStore` A Circuit store which holds the internal circuit state along with associated nodes.
 -   `className?: string` An optional className to assign the Circuit.
+-   `nodeWindowResolver?: (node: Node) => JSX.Element` An optional function which can be used to render a custom "window" for given nodes.
 -   `onConnection?(connection: Connection<unknown>)` An optional callback which fires when new connections are made.
 -   `onConnectionRemoval?(connection: Connection<unknown>)` An optional callback which fires when connections are removed.
 -   `onNodeRemoval?(node: Node)` An optional callback which fires when nodes are removed.
