@@ -6,7 +6,6 @@ import { SceneWindow } from '../components/SceneWindow/SceneWindow';
 import { Color } from '../nodes/ColorNode/ColorNode';
 import { Mesh } from '../nodes/MeshNode/MeshNode';
 import { Mix } from '../nodes/MixNode/MixNode';
-import { Scene } from '../nodes/SceneNode/SceneNode';
 
 export const useNodeWindowResolver = () => {
     return React.useCallback((node: Node) => {
@@ -14,8 +13,6 @@ export const useNodeWindowResolver = () => {
             return <ColorWindow observable={node.outputs.output} />;
         } else if (node instanceof Color) {
             return <ColorWindow observable={node.inputs.color} />;
-        } else if (node instanceof Scene) {
-            return <SceneWindow observable={node.inputs.mesh} />;
         } else if (node instanceof Mesh) {
             return <SceneWindow observable={node.outputs.mesh} />;
         }

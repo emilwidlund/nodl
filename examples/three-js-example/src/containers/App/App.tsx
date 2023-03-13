@@ -8,14 +8,12 @@ import { useNodeWindowResolver } from '../../hooks/useNodeWindowResolver';
 import { Color } from '../../nodes/ColorNode/ColorNode';
 import { Mesh } from '../../nodes/MeshNode/MeshNode';
 import { Mix } from '../../nodes/MixNode/MixNode';
-import { Scene } from '../../nodes/SceneNode/SceneNode';
 
 /** Declare 3 nodes */
 const colorNode = new Color();
 const colorNode2 = new Color();
 const mixNode = new Mix();
 const meshNode = new Mesh();
-const sceneNode = new Scene();
 
 /** Connect them together */
 colorNode.outputs.rgb.connect(mixNode.inputs.a);
@@ -34,11 +32,10 @@ export const App = () => {
 
     React.useEffect(() => {
         store.setNodes([
-            [colorNode, { x: -220, y: 400 }],
-            [colorNode2, { x: -220, y: 0 }],
-            [mixNode, { x: 220, y: 200 }],
-            [meshNode, { x: 600, y: 200 }],
-            [sceneNode, { x: 900, y: 200 }]
+            [colorNode, { x: -420, y: 400 }],
+            [colorNode2, { x: -420, y: 0 }],
+            [mixNode, { x: 0, y: 200 }],
+            [meshNode, { x: 400, y: 200 }]
         ]);
 
         return () => {
