@@ -1,6 +1,6 @@
 {
     "name": "@nodl/react",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "React implementation of the Nodl framework",
     "main": "build/index.js",
     "types": "build/index.d.ts",
@@ -27,7 +27,7 @@
     "homepage": "https://github.com/emilwidlund/nodl#readme",
     "dependencies": {
         "@emotion/react": "^11.10.6",
-        "@nodl/core": "^0.1.1",
+        "@nodl/core": "^1.0.1",
         "@types/lodash": "^4.14.191",
         "@types/react": "^18.0.26",
         "lodash": "^4.17.21",
