@@ -1,6 +1,7 @@
 // @ts-check
 // Note: type annotations allow type checking and IDEs autocompletion
 
+const path = require('path');
 const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const lightCodeTheme = require('prism-react-renderer/themes/github');
 
@@ -47,6 +48,24 @@ const config = {
         ]
     ],
 
+    plugins: [
+        [
+            'docusaurus-plugin-typedoc-api',
+            {
+                projectRoot: path.join(__dirname, '../..'),
+                // Monorepo
+                packages: [
+                    {
+                        path: 'packages/core'
+                    },
+                    {
+                        path: 'packages/react'
+                    }
+                ]
+            }
+        ]
+    ],
+
     themeConfig:
         /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
         ({
@@ -59,6 +78,11 @@ const config = {
                         to: '/docs/intro',
                         position: 'left',
                         label: 'Documentation'
+                    },
+                    {
+                        to: '/api',
+                        label: 'API',
+                        position: 'left'
                     },
                     {
                         href: 'https://github.com/emilwidlund/nodl',
