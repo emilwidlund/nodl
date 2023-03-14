@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "lib": ["es2021", "DOM"],
+        "target": "ES6",
+        "strict": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "downlevelIteration": true,
+        "outDir": "build",
+        "declaration": true,
+        "jsx": "react"
+    },
+    "include": ["./packages/core", "./packages/react"]
+}
