@@ -49,12 +49,6 @@ colorNode2.inputs.color.next(color('#ff0048'));
 
 const store = new CircuitStore();
 
-store.setNodes([
-    [colorNode, { x: -220, y: 200 }],
-    [colorNode2, { x: -220, y: 0 }],
-    [mixNode, { x: 220, y: 100 }]
-]);
-
 export default function Home(): JSX.Element {
     const { siteConfig } = useDocusaurusContext();
     const nodeWindowResolver = useNodeWindowResolver();

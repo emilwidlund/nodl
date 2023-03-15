@@ -128,6 +128,15 @@ export class CircuitStore {
 
     /** Disposes the store by cleaning up effects */
     public dispose(): void {
+        this.nodes = [];
+        this.nodeElements.clear();
+        this.nodePositions.clear();
+        this.portElements.clear();
+        this.selectedNodes = [];
+        this.selectionBounds = null;
+        this.draftConnectionSource = null;
+        this.mousePosition = { x: 0, y: 0 };
+
         this.selectionBoundsDisposer();
     }
 
