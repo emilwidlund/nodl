@@ -119,7 +119,7 @@ import { z } from 'zod';
 const ColorSchema = schema('Color', z.instanceOf(THREE.Color));
 
 export class Color extends Node {
-    name = 'Addition';
+    name = 'Color';
 
     inputs = {
         color: new Input({
