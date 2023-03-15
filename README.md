@@ -4,6 +4,7 @@
 
 A framework for node-based applications. Leveraged by RxJS and Zod.
 
+[Documentation](https://usenodl.dev)
 [View Demo](https://codesandbox.io/s/agitated-elgamal-txqqql?file=/src/App.js)
 
 ![Visual representation of nodl](assets/nodl.png?raw=true)
