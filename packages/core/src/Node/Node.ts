@@ -21,7 +21,6 @@ export abstract class Node<TData extends NodeData = NodeData> {
     constructor() {
         makeObservable(this, {
             id: observable,
-            name: observable,
             data: observable,
             connections: computed,
             dispose: action

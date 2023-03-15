@@ -9,6 +9,8 @@ import { Node } from './Node';
 export const NumberSchema = schema(z.number());
 
 export class Addition extends Node {
+    name = 'Addition';
+
     inputs = {
         a: new Input({ name: 'A', type: NumberSchema, defaultValue: 0 }),
         b: new Input({ name: 'B', type: NumberSchema, defaultValue: 0 })
