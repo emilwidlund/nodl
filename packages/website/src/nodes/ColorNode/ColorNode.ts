@@ -5,6 +5,8 @@ import { map } from 'rxjs';
 import { ColorSchema } from '../../schemas/ColorSchema/ColorSchema';
 
 export class Color extends Node {
+    name = 'Color';
+
     inputs = {
         color: new Input({
             name: 'Color',

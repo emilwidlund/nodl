@@ -5,6 +5,8 @@ import { combineLatest, map } from 'rxjs';
 import { ColorSchema } from '../../schemas/ColorSchema/ColorSchema';
 
 export class Mix extends Node {
+    name = 'Mix';
+
     inputs = {
         a: new Input({ name: 'A', type: ColorSchema, defaultValue: color('#000') }),
         b: new Input({ name: 'B', type: ColorSchema, defaultValue: color('#000') })

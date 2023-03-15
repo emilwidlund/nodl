@@ -116,7 +116,7 @@ const NodePorts = ({ ports, isOutputWrapper }: NodePortsProps) => {
     return (
         <div css={nodePortsWrapperStyles(isOutputWrapper)}>
             {ports.map(port => (
-                <Port key={port.id} port={port} />
+                <Port key={port.id} port={port} isOutput={!!isOutputWrapper} />
             ))}
         </div>
     );

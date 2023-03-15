@@ -8,6 +8,8 @@ import { ColorSchema } from '../../schemas/ColorSchema/ColorSchema';
 import { MeshSchema } from '../../schemas/MeshSchema/MeshSchema';
 
 export class Mesh extends Node {
+    name = 'Mesh';
+
     inputs = {
         color: new Input({
             name: 'Color',
