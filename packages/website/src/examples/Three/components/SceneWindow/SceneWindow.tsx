@@ -1,4 +1,4 @@
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas } from '@react-three/fiber';
 import React from 'react';
 import { Mesh } from 'three';
 
@@ -7,13 +7,7 @@ import { SceneWindowProps } from './SceneWindow.types';
 const MeshComponent = ({ mesh }: { mesh: Mesh }) => {
     const meshRef = React.useRef<Mesh>();
 
-    useFrame(({ clock }) => {
-        if (meshRef.current) {
-            meshRef.current.rotation.x = clock.getElapsedTime();
-            meshRef.current.rotation.y = clock.getElapsedTime();
-        }
-    });
-    return <primitive ref={meshRef} object={mesh} position={[0, 0, 0]} />;
+    return <primitive ref={meshRef} object={mesh} />;
 };
 
 export const SceneWindow = ({ observable }: SceneWindowProps) => {

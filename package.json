@@ -7,7 +7,6 @@
     "scripts": {
         "test": "yarn workspaces run test",
         "build": "yarn workspaces run build",
-        "generate:docs": "yarn workspaces run generate:docs",
         "prepare": "husky install"
     },
     "repository": {

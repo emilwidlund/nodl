@@ -14,7 +14,7 @@ export const useNodeWindowResolver = () => {
         } else if (node instanceof Color) {
             return <ColorWindow observable={node.inputs.color} />;
         } else if (node instanceof Mesh) {
-            return <SceneWindow observable={node.outputs.mesh} />;
+            return <SceneWindow observable={node.mesh} />;
         }
     }, []);
 };
