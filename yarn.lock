@@ -3260,6 +3260,12 @@
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
+CanvasSpliner@jonathanlurie/CanvasSpliner:
+  version "0.1.0"
+  resolved "https://codeload.github.com/jonathanlurie/CanvasSpliner/tar.gz/549d3ca8778e2f45edcb4442f246d7f619ab445a"
+  dependencies:
+    splines jonathanlurie/splines
+
 abab@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/abab/-/abab-2.0.6.tgz#41b80f2c871d19686216b82309231cfd3cb3d291"
@@ -9624,6 +9630,10 @@ specificity@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/specificity/-/specificity-0.4.1.tgz#aab5e645012db08ba182e151165738d00887b019"
   integrity sha512-1klA3Gi5PD1Wv9Q0wUoOQN1IWAuPu0D1U03ThXTr0cJ20+/iq2tHSDnK7Kk/0LXJ1ztUB2/1Os0wKmfyNgUQfg==
+
+splines@jonathanlurie/splines:
+  version "1.0.0"
+  resolved "https://codeload.github.com/jonathanlurie/splines/tar.gz/571665cfe15f5aa9aad338cb6f933c773e251073"
 
 split-string@^3.0.1:
   version "3.1.0"

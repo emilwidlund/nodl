@@ -27,6 +27,17 @@ export const useNodeControls = () => {
                                 }
                             }
                         };
+                    } else if (typeof input.value === 'number' && !input.connected) {
+                        return {
+                            ...acc,
+                            [`${input.name}: ${input.id}`]: {
+                                value: input.value,
+                                step: 1,
+                                onChange: value => {
+                                    input.next(value);
+                                }
+                            }
+                        };
                     } else {
                         return acc;
                     }
