@@ -1,20 +1,16 @@
 import { css } from '@emotion/react';
 
-import { NODE_WIDTH } from '../../constants';
-
 export const NODE_CONTENT_PADDING = 12;
 
-export const nodeWrapperStyles = (active: boolean) => css`
+export const nodeContainerStyles = (active: boolean) => css`
     --node-background: var(--panel-background);
 
-    position: absolute;
     display: flex;
     flex-direction: column;
-    width: ${NODE_WIDTH}px;
     user-select: none;
     -webkit-user-select: none;
-    z-index: ${active ? 9 : 0};
     border-radius: 12px;
+    width: 260px;
     transition: box-shadow 0.15s;
     font-feature-settings: 'ss02' 1;
 

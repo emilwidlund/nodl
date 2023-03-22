@@ -2,9 +2,9 @@
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
-import { fromCartesianPoint } from '../../utils/coordinates/coordinates';
 import { canvasWrapperStyles, canvasContentStyles } from './Canvas.styles';
 import { CanvasProps } from './Canvas.types';
+import { fromCartesianPoint } from '../../utils/coordinates/coordinates';
 
 export const Canvas = observer(
     React.forwardRef<HTMLDivElement, CanvasProps>(
@@ -23,7 +23,7 @@ export const Canvas = observer(
 
                     scrollRef.current.scrollTo({ left: x - offsetX, top: y - offsetY });
                 }
-            }, []);
+            }, [size]);
 
             return (
                 <div ref={scrollRef} css={canvasWrapperStyles} className={className}>

@@ -6,6 +6,7 @@ export type NodeWindowResolver = (node: Node) => JSX.Element | undefined;
 
 export type CircuitProps = {
     store: CircuitStore;
+    size?: { width: number; height: number };
     className?: string;
     nodeWindowResolver?: NodeWindowResolver;
     onNodeRemoval?(node: Node): void;

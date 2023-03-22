@@ -4,7 +4,6 @@ import { DraggableProps } from 'react-draggable';
 export type NodeProps = {
     node: Node;
     window?: JSX.Element;
-    actions?: NodeActionProps[];
     className?: string;
     disabled?: boolean;
 } & Partial<DraggableProps>;

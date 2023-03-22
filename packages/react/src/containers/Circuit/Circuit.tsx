@@ -3,15 +3,14 @@ import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
+import { circuitContainerStyles, circuitSelectionStyles } from './Circuit.styles';
+import { CircuitProps, NodeWindowResolver } from './Circuit.types';
 import { Canvas } from '../../components/Canvas/Canvas';
 import { Connection } from '../../components/Connection/Connection';
 import { Node } from '../../components/Node/Node';
-import { CANVAS_SIZE } from '../../constants';
 import { useKeyboardActions } from '../../hooks/useKeyboardActions/useKeyboardActions';
 import { StoreContext } from '../../stores/CircuitStore/CircuitStore';
 import { normalizeBounds } from '../../utils/bounds/bounds';
-import { circuitContainerStyles, circuitSelectionStyles } from './Circuit.styles';
-import { CircuitProps, NodeWindowResolver } from './Circuit.types';
 
 const Nodes = observer(({ windowResolver }: { windowResolver?: NodeWindowResolver }) => {
     const { store } = React.useContext(StoreContext);
@@ -139,13 +138,17 @@ export const Circuit = observer(
             );
         }, [props]);
 
+        React.useEffect(() => {
+            props.store.setCanvasSize(props.size?.width || 10000, props.size?.height || 10000);
+        }, [props]);
+
         return (
             <StoreContext.Provider value={{ store: props.store }}>
                 <Canvas
                     ref={ref}
                     className={props.className}
                     css={circuitContainerStyles}
-                    size={{ width: CANVAS_SIZE, height: CANVAS_SIZE }}
+                    size={props.store.canvasSize}
                     onMouseDown={onMouseDown}
                     onMouseMove={onMouseMove}
                     onMouseUp={onMouseUp}

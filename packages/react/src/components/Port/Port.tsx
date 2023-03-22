@@ -1,17 +1,19 @@
 /** @jsxImportSource @emotion/react */
-import { Input, Output } from '@nodl/core';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
+import { portTypeStyles, portWrapperStyles } from './Port.styles';
+import { PortProps } from './Port.types';
 import { useHover } from '../../hooks/useHover/useHover';
+import { usePort } from '../../hooks/usePort/usePort';
 import { StoreContext } from '../../stores/CircuitStore/CircuitStore';
 import { Tooltip } from '../Tooltip/Tooltip';
 import { TooltipPosition } from '../Tooltip/Tooltip.types';
-import { portTypeStyles, portWrapperStyles } from './Port.styles';
-import { PortProps } from './Port.types';
 
-export const Port = observer(<T,>({ port, isOutput }: PortProps<T>) => {
-    const ref = React.useRef<HTMLDivElement>(null);
+export const Port = observer(<T,>({ port }: PortProps<T>) => {
+    const { ref, onMouseUp, onMouseDown, onClick } = usePort(port);
+    const isOutput = React.useMemo(() => 'connect' in port, [port]);
+
     const { onMouseEnter, onMouseLeave, isHovered } = useHover();
     const { onMouseEnter: onPortTypeEnter, onMouseLeave: onPortTypeLeave, isHovered: isPortTypeHovered } = useHover();
     const { store } = React.useContext(StoreContext);
@@ -27,40 +29,6 @@ export const Port = observer(<T,>({ port, isOutput }: PortProps<T>) => {
 
         return store.draftConnectionSource ? isOccupied || hasDifferentValueType || isOutput || hasSharedNode : false;
     }, [isOutput]);
-
-    React.useEffect(() => {
-        if (ref.current) {
-            store.setPortElement(port.id, ref.current);
-
-            return () => {
-                store.removePortElement(port.id);
-            };
-        }
-    }, []);
-
-    const onMouseDown = React.useCallback(() => {
-        if (isOutput) {
-            store.setDraftConnectionSource(port as Output<any>);
-        }
-    }, [isOutput]);
-
-    const onMouseUp = React.useCallback(() => {
-        if (!isOutput && store.draftConnectionSource) {
-            store.commitDraftConnection(port as Input<any>);
-        }
-    }, [isOutput]);
-
-    const onClick = React.useCallback(() => {
-        if (port.connected) {
-            const connections = 'connection' in port ? [port.connection] : port.connections;
-
-            for (const connection of connections) {
-                if (connection) {
-                    connection.dispose();
-                }
-            }
-        }
-    }, [port]);
 
     return (
         <Tooltip text={port.type.name} position={tooltipPosition}>

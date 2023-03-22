@@ -1,12 +1,11 @@
 import { render, fireEvent } from '@testing-library/react';
 import * as React from 'react';
 
-import { CANVAS_SIZE } from '../../constants';
 import { Canvas } from './Canvas';
 import { CanvasProps } from './Canvas.types';
 
 const setup = (props?: Partial<CanvasProps>) => {
-    return render(<Canvas size={{ width: CANVAS_SIZE, height: CANVAS_SIZE }} {...props} />);
+    return render(<Canvas size={{ width: 10000, height: 10000 }} {...props} />);
 };
 
 describe('Canvas', () => {
@@ -21,7 +20,7 @@ describe('Canvas', () => {
 
         setup();
 
-        expect(scrollToSpy).toHaveBeenNthCalledWith(1, { left: CANVAS_SIZE / 2, top: CANVAS_SIZE / 2 });
+        expect(scrollToSpy).toHaveBeenNthCalledWith(1, { left: 10000 / 2, top: 10000 / 2 });
     });
 
     it('should invoke onMouseMove-handler', () => {

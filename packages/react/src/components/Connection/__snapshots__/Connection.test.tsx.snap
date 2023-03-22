@@ -10,12 +10,12 @@ exports[`Connection should render correctly 1`] = `
       <path
         class="connector"
         d="
-        M4730,4912 
-        L4974,4912 
-        Q4994,4912 4994,4892 
-        L4994,4732
-        Q4994,4712 5014,4712
-        L5258,4712
+        M-400,-88 
+        L-26,-88 
+        Q-6,-88 -6,-108 
+        L-6,-268
+        Q-6,-288 14,-288
+        L388,-288
     "
         fill="none"
         stroke="#424763"
@@ -23,14 +23,14 @@ exports[`Connection should render correctly 1`] = `
       />
       <path
         class="port"
-        d="M4730,4912,4732,4912"
+        d="M-400,-88,-398,-88"
         fill="none"
         stroke="#424763"
         stroke-width="8"
       />
       <path
         class="port"
-        d="M5256,4712,5258,4712"
+        d="M386,-288,388,-288"
         fill="none"
         stroke="#424763"
         stroke-width="8"

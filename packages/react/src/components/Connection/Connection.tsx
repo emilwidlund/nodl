@@ -3,11 +3,9 @@ import { autorun } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
-import { NODE_POSITION_OFFSET_X } from '../../constants';
-import { StoreContext } from '../../stores/CircuitStore/CircuitStore';
-import { fromCanvasCartesianPoint } from '../../utils/coordinates/coordinates';
 import { ConnectionProps } from './Connection.types';
 import { quadraticCurve } from './Connection.utils';
+import { StoreContext } from '../../stores/CircuitStore/CircuitStore';
 
 const INPUT_PORT_OFFSET_X = 12;
 const INPUT_PORT_OFFSET_Y = 12;
@@ -34,22 +32,27 @@ export const Connection = observer(<T,>({ output, connection }: ConnectionProps<
         if (outputElement && inputElement) {
             return autorun(() => {
                 if (connection) {
-                    const fromPosition = store.nodePositions.get(store.getNodeByPortId(connection.from.id)?.id || '');
-                    const toPosition = store.nodePositions.get(store.getNodeByPortId(connection.to.id)?.id || '');
+                    const fromNode = store.getNodeByPortId(connection.from.id);
+                    const toNode = store.getNodeByPortId(connection.to.id);
+
+                    const fromPosition = store.nodePositions.get(fromNode?.id || '');
+                    const toPosition = store.nodePositions.get(toNode?.id || '');
 
                     if (!fromPosition || !toPosition) {
                         return;
                     }
 
-                    const outputCartesian = fromCanvasCartesianPoint(
-                        fromPosition.x + NODE_POSITION_OFFSET_X,
+                    const fromNodeHalfWidth =
+                        (store.nodeElements.get(fromNode?.id || '')?.getBoundingClientRect().width || 0) / 2;
+                    const toNodeHalfWidth =
+                        (store.nodeElements.get(toNode?.id || '')?.getBoundingClientRect().width || 0) / 2;
+
+                    const outputCartesian = store.fromCanvasCartesianPoint(
+                        fromPosition.x + fromNodeHalfWidth,
                         fromPosition.y
                     );
 
-                    const inputCartesian = fromCanvasCartesianPoint(
-                        toPosition.x - NODE_POSITION_OFFSET_X,
-                        toPosition.y
-                    );
+                    const inputCartesian = store.fromCanvasCartesianPoint(toPosition.x - toNodeHalfWidth, toPosition.y);
 
                     const outputPortPosition = {
                         x: outputCartesian.x,
@@ -83,14 +86,18 @@ export const Connection = observer(<T,>({ output, connection }: ConnectionProps<
     React.useEffect(() => {
         if (output && outputElement) {
             return autorun(() => {
-                const outputPosition = store.nodePositions.get(store.getNodeByPortId(output.id)?.id || '');
+                const fromNode = store.getNodeByPortId(output.id);
+                const outputPosition = store.nodePositions.get(fromNode?.id || '');
 
                 if (!outputPosition) {
                     return;
                 }
 
-                const outputCartesian = fromCanvasCartesianPoint(
-                    outputPosition.x + NODE_POSITION_OFFSET_X,
+                const fromNodeHalfWidth =
+                    (store.nodeElements.get(fromNode?.id || '')?.getBoundingClientRect().width || 0) / 2;
+
+                const outputCartesian = store.fromCanvasCartesianPoint(
+                    outputPosition.x + fromNodeHalfWidth,
                     outputPosition.y
                 );
 

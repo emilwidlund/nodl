@@ -3,11 +3,10 @@ import { isEmpty, isEqual, xorWith } from 'lodash';
 import { autorun, IReactionDisposer, makeAutoObservable } from 'mobx';
 import { createContext } from 'react';
 
-import { NODE_CENTER } from '../../constants';
+import { MousePosition, NodeWithPosition, StoreProviderValue } from './CircuitStore.types';
 import { normalizeBounds, withinBounds } from '../../utils/bounds/bounds';
 import { Bounds } from '../../utils/bounds/bounds.types';
-import { fromCanvasCartesianPoint } from '../../utils/coordinates/coordinates';
-import { MousePosition, NodeWithPosition, StoreProviderValue } from './CircuitStore.types';
+import { fromCartesianPoint, toCartesianPoint } from '../../utils/coordinates/coordinates';
 
 export class CircuitStore {
     /** Associated Nodes */
@@ -26,6 +25,8 @@ export class CircuitStore {
     public selectionBounds: Bounds | null = null;
     /** Mouse Position */
     public mousePosition: MousePosition = { x: 0, y: 0 };
+    /** Canvas Size */
+    public canvasSize: { width: number; height: number } = { width: 0, height: 0 };
 
     /** Selection Bounds autorun disposer */
     private selectionBoundsDisposer: IReactionDisposer;
@@ -119,11 +120,26 @@ export class CircuitStore {
         this.nodePositions.delete(nodeId);
     }
 
+    /** Sets the canvas size */
+    public setCanvasSize(width: number, height: number) {
+        this.canvasSize = { width, height };
+    }
+
     /** Returns the node with the associated port */
     public getNodeByPortId(portId: Input['id'] | Output['id']) {
         return this.nodes.find(node => {
             return [...Object.values(node.inputs), ...Object.values(node.outputs)].some(port => port.id === portId);
         });
+    }
+
+    /** Resolves a cartesian coordinate point to an absolute coordinate, relative to the canvas size */
+    public fromCanvasCartesianPoint(x: number, y: number) {
+        return fromCartesianPoint(this.canvasSize.width, this.canvasSize.height, x, y);
+    }
+
+    /** Resolves an absolute coordinate point to a cartesian coordinate, relative to the canvas size */
+    public toCanvasCartesianPoint(x: number, y: number) {
+        return toCartesianPoint(this.canvasSize.width, this.canvasSize.height, x, y);
     }
 
     /** Disposes the store by cleaning up effects */
@@ -136,6 +152,7 @@ export class CircuitStore {
         this.selectionBounds = null;
         this.draftConnectionSource = null;
         this.mousePosition = { x: 0, y: 0 };
+        this.canvasSize = { width: 0, height: 0 };
 
         this.selectionBoundsDisposer();
     }
@@ -159,7 +176,7 @@ export class CircuitStore {
                         if (
                             nodePosition &&
                             withinBounds(bounds, {
-                                ...fromCanvasCartesianPoint(nodePosition.x - NODE_CENTER, nodePosition.y),
+                                ...this.fromCanvasCartesianPoint(nodePosition.x - nodeRect.width / 2, nodePosition.y),
                                 width: nodeRect.width,
                                 height: nodeRect.height
                             })
