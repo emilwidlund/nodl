@@ -60,6 +60,9 @@ const config = {
                     },
                     {
                         path: 'packages/react'
+                    },
+                    {
+                        path: 'packages/math'
                     }
                 ]
             }
