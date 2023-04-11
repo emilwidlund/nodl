@@ -4,9 +4,7 @@ sidebar_position: 1
 
 # Introduction
 
-A framework for node-based applications. Leveraged by RxJS and Zod.
-
-[View Demo](https://codesandbox.io/s/agitated-elgamal-txqqql?file=/src/App.js)
+A framework for node-based applications. Leveraged by RxJS.
 
 ![Visual representation of nodl](../static/img/nodl2.png)
 

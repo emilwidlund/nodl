@@ -2,7 +2,7 @@ import { Node, Input, Output } from '@nodl/core';
 import color from 'color';
 import { map } from 'rxjs';
 
-import { ColorSchema } from '../../schemas/ColorSchema/ColorSchema';
+import { ColorSchema } from '../../../../schemas/ColorSchema/ColorSchema';
 
 export class Color extends Node {
     name = 'Color';
