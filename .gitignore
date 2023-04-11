@@ -4,3 +4,4 @@ build
 
 # Files
 .DS_STORE
+*.log

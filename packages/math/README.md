@@ -17,6 +17,7 @@ const additionNode = new Addition();
 -   Ceil
 -   Cosine
 -   Division
+-   Euler
 -   Floor
 -   Logarithm
 -   Logarithm2
@@ -25,6 +26,7 @@ const additionNode = new Addition();
 -   Modulo
 -   Multiplication
 -   Power
+-   PI
 -   Round
 -   Sign
 -   Sine
