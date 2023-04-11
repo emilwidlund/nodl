@@ -5,7 +5,7 @@ Utility nodes based on the Math-global. Inputs are mapped to native method's arg
 ## Example
 
 ```typescript
-import { Addition } from '@nodl/nodes/math';
+import { Addition } from '@nodl/math';
 
 const additionNode = new Addition();
 ```
