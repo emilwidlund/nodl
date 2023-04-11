@@ -11,5 +11,5 @@
         "declaration": true,
         "jsx": "react"
     },
-    "include": ["./packages/core", "./packages/react"]
+    "include": ["./packages/core", "./packages/react", "./packages/math"]
 }
