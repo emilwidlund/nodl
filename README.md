@@ -23,3 +23,9 @@ The core implementation of the Nodl framework. Exposes utilities and functions t
 A React implementation of the Nodl framework. Exposes components & utilities for rendering Nodl nodes & connections.
 
 [See package](packages/react)
+
+### @nodl/math
+
+A library of pre-defined math nodes ready for use.
+
+[See package](packages/math)
