@@ -138,3 +138,7 @@ export const App = () => {
     return <Circuit store={store} />;
 };
 ```
+
+### Disclaimer
+
+The React-package injects the Inter-typeface using a preconnect-link and stylesheet-link in the header when imported.
