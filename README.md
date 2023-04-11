@@ -2,10 +2,9 @@
 
 [![Nodl CI](https://github.com/emilwidlund/nodl/actions/workflows/main.yaml/badge.svg)](https://github.com/emilwidlund/nodl/actions/workflows/main.yaml)
 
-A framework for node-based applications. Leveraged by RxJS and Zod.
+A framework for node-based applications. Leveraged by RxJS.
 
 [Documentation](https://usenodl.dev)
-[View Demo](https://codesandbox.io/s/agitated-elgamal-txqqql?file=/src/App.js)
 
 ![Visual representation of nodl](assets/nodl.png?raw=true)
 
