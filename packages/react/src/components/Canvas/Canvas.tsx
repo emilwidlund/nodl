@@ -2,14 +2,16 @@
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
-import { fromCartesianPoint } from '../../utils/coordinates/coordinates';
 import { canvasWrapperStyles, canvasContentStyles } from './Canvas.styles';
 import { CanvasProps } from './Canvas.types';
+import { StoreContext } from '../../stores/CircuitStore/CircuitStore';
+import { fromCartesianPoint } from '../../utils/coordinates/coordinates';
 
 export const Canvas = observer(
     React.forwardRef<HTMLDivElement, CanvasProps>(
         ({ children, size, className, onMouseMove, onClick, onMouseDown, onMouseUp }: CanvasProps, ref) => {
             const scrollRef = React.useRef<HTMLDivElement>(null);
+            const { store } = React.useContext(StoreContext);
 
             React.useEffect(() => {
                 if (scrollRef.current) {
@@ -29,7 +31,7 @@ export const Canvas = observer(
                 <div ref={scrollRef} css={canvasWrapperStyles} className={className}>
                     <div
                         ref={ref}
-                        css={canvasContentStyles(size)}
+                        css={canvasContentStyles(size, store.zoomFactor)}
                         className="canvas"
                         children={children}
                         onMouseMove={onMouseMove}

@@ -3,11 +3,11 @@ import { isEmpty, isEqual, xorWith } from 'lodash';
 import { autorun, IReactionDisposer, makeAutoObservable } from 'mobx';
 import { createContext } from 'react';
 
+import { MousePosition, NodeWithPosition, StoreProviderValue } from './CircuitStore.types';
 import { NODE_CENTER } from '../../constants';
 import { normalizeBounds, withinBounds } from '../../utils/bounds/bounds';
 import { Bounds } from '../../utils/bounds/bounds.types';
 import { fromCanvasCartesianPoint } from '../../utils/coordinates/coordinates';
-import { MousePosition, NodeWithPosition, StoreProviderValue } from './CircuitStore.types';
 
 export class CircuitStore {
     /** Associated Nodes */
@@ -24,6 +24,8 @@ export class CircuitStore {
     public draftConnectionSource: Output | null = null;
     /** Selection bounds */
     public selectionBounds: Bounds | null = null;
+    /** Zoom Factor */
+    public zoomFactor = 1.5;
     /** Mouse Position */
     public mousePosition: MousePosition = { x: 0, y: 0 };
 
@@ -119,6 +121,11 @@ export class CircuitStore {
         this.nodePositions.delete(nodeId);
     }
 
+    /** Sets the zoom factor */
+    public setZoomFactor(factor: number) {
+        this.zoomFactor = factor;
+    }
+
     /** Returns the node with the associated port */
     public getNodeByPortId(portId: Input['id'] | Output['id']) {
         return this.nodes.find(node => {
@@ -160,8 +167,8 @@ export class CircuitStore {
                             nodePosition &&
                             withinBounds(bounds, {
                                 ...fromCanvasCartesianPoint(nodePosition.x - NODE_CENTER, nodePosition.y),
-                                width: nodeRect.width,
-                                height: nodeRect.height
+                                width: nodeRect.width / this.zoomFactor,
+                                height: nodeRect.height / this.zoomFactor
                             })
                         ) {
                             selectionCandidates.push(node);

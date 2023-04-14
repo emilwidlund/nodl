@@ -3,11 +3,6 @@ import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 import Draggable, { DraggableEventHandler } from 'react-draggable';
 
-import { NODE_POSITION_OFFSET_X } from '../../constants';
-import { useHover } from '../../hooks/useHover/useHover';
-import { StoreContext } from '../../stores/CircuitStore/CircuitStore';
-import { fromCanvasCartesianPoint } from '../../utils/coordinates/coordinates';
-import { Port } from '../Port/Port';
 import {
     nodeHeaderWrapperStyles,
     nodeContentWrapperStyles,
@@ -19,6 +14,11 @@ import {
     nodeWindowWrapperStyles
 } from './Node.styles';
 import { NodeActionProps, NodePortsProps, NodeProps } from './Node.types';
+import { NODE_POSITION_OFFSET_X } from '../../constants';
+import { useHover } from '../../hooks/useHover/useHover';
+import { StoreContext } from '../../stores/CircuitStore/CircuitStore';
+import { fromCanvasCartesianPoint } from '../../utils/coordinates/coordinates';
+import { Port } from '../Port/Port';
 
 export const Node = observer(({ node, actions, window }: NodeProps) => {
     const ref = React.useRef<HTMLDivElement>(null);
@@ -57,12 +57,12 @@ export const Node = observer(({ node, actions, window }: NodeProps) => {
 
             for (const selectedNode of store.selectedNodes || []) {
                 store.setNodePosition(selectedNode.id, {
-                    x: (store.nodePositions.get(selectedNode.id)?.x || 0) + deltaX,
-                    y: (store.nodePositions.get(selectedNode.id)?.y || 0) + -deltaY
+                    x: (store.nodePositions.get(selectedNode.id)?.x || 0) + deltaX / store.zoomFactor,
+                    y: (store.nodePositions.get(selectedNode.id)?.y || 0) + -deltaY / store.zoomFactor
                 });
             }
         },
-        [node]
+        [node, store]
     );
 
     const handleRemoveNode = React.useCallback(() => {

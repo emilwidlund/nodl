@@ -10,7 +10,9 @@ exports[`Canvas should render correctly 1`] = `
 }
 
 .emotion-1 {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 10000px;
   height: 10000px;
   background-image: radial-gradient(#434437 5%, #1c1e2a 5%);
@@ -18,6 +20,11 @@ exports[`Canvas should render correctly 1`] = `
   background-position: 0 0;
   -webkit-background-size: 30px 30px;
   background-size: 30px 30px;
+  -webkit-transform: scale(1.5);
+  -moz-transform: scale(1.5);
+  -ms-transform: scale(1.5);
+  transform: scale(1.5);
+  transform-origin: 0 0;
 }
 
 <div

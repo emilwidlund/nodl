@@ -3,6 +3,8 @@ import { reaction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
+import { circuitContainerStyles, circuitSelectionStyles } from './Circuit.styles';
+import { CircuitProps, NodeWindowResolver } from './Circuit.types';
 import { Canvas } from '../../components/Canvas/Canvas';
 import { Connection } from '../../components/Connection/Connection';
 import { Node } from '../../components/Node/Node';
@@ -10,8 +12,6 @@ import { CANVAS_SIZE } from '../../constants';
 import { useKeyboardActions } from '../../hooks/useKeyboardActions/useKeyboardActions';
 import { StoreContext } from '../../stores/CircuitStore/CircuitStore';
 import { normalizeBounds } from '../../utils/bounds/bounds';
-import { circuitContainerStyles, circuitSelectionStyles } from './Circuit.styles';
-import { CircuitProps, NodeWindowResolver } from './Circuit.types';
 
 const Nodes = observer(({ windowResolver }: { windowResolver?: NodeWindowResolver }) => {
     const { store } = React.useContext(StoreContext);
@@ -56,26 +56,33 @@ export const Circuit = observer(
     React.forwardRef<HTMLDivElement, CircuitProps>((props, ref) => {
         useKeyboardActions(props.store);
 
-        const onMouseMove = React.useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-            const rect = e.currentTarget.getBoundingClientRect();
-            const x = e.nativeEvent.clientX - rect.left;
-            const y = e.nativeEvent.clientY - rect.top;
+        const onMouseMove = React.useCallback(
+            (e: React.MouseEvent<HTMLDivElement>) => {
+                const targetIsCanvas = 'id' in e.target && e.target.id === 'connections';
+                const x = targetIsCanvas
+                    ? e.nativeEvent.offsetX
+                    : props.store.mousePosition.x + e.nativeEvent.movementX / props.store.zoomFactor;
+                const y = targetIsCanvas
+                    ? e.nativeEvent.offsetY
+                    : props.store.mousePosition.y + e.nativeEvent.movementY / props.store.zoomFactor;
 
-            props.store.setMousePosition({ x, y });
+                if (props.store.selectionBounds) {
+                    const { x: selectionX, y: selectionY, width, height } = props.store.selectionBounds;
 
-            if (props.store.selectionBounds) {
-                const { x, y, width, height } = props.store.selectionBounds;
+                    const bounds = {
+                        x: selectionX,
+                        y: selectionY,
+                        width: width + e.movementX / props.store.zoomFactor,
+                        height: height + e.movementY / props.store.zoomFactor
+                    };
 
-                const bounds = {
-                    x,
-                    y,
-                    width: width + e.movementX,
-                    height: height + e.movementY
-                };
+                    props.store.setSelectionBounds(bounds);
+                }
 
-                props.store.setSelectionBounds(bounds);
-            }
-        }, []);
+                props.store.setMousePosition({ x, y });
+            },
+            [props]
+        );
 
         const onMouseDown = React.useCallback(({ nativeEvent }: React.MouseEvent<HTMLDivElement>) => {
             if ((nativeEvent.target as HTMLDivElement).id === 'connections') {
