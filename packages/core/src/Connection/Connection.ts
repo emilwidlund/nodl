@@ -18,11 +18,6 @@ export class Connection<T> extends Subject<T> {
     constructor(from: Output<T>, to: Input<T>) {
         super();
 
-        /** Check zod schema validators */
-        if (from.type.name !== to.type.name) {
-            throw new Error('Input type is incompatible with Output type');
-        }
-
         if (to.connected) {
             /** Remove previous connection gracefully */
             to.connection?.dispose();
