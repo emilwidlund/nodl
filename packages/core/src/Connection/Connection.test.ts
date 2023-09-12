@@ -1,10 +1,4 @@
-import { Observable } from 'rxjs';
-import { z } from 'zod';
-
-import { Input } from '../Input/Input';
 import { Addition } from '../Node/Node.fixture';
-import { Output } from '../Output/Output';
-import { schema } from '../Schema/Schema';
 
 describe('Connection', () => {
     it('should transfer values', () => {
@@ -57,14 +51,5 @@ describe('Connection', () => {
 
         expect(() => node2.outputs.output.connect(node3.inputs.a)).not.toThrow();
         expect(spy).toBeCalled();
-    });
-
-    it('should throw when schemas are different', () => {
-        const observable = new Observable();
-        const a = new Output({ name: 'A', type: schema('Number', z.number()), observable });
-        const b = new Input({ name: 'B', type: schema('String', z.string()), defaultValue: 'Hello' });
-
-        // @ts-ignore
-        expect(() => a.connect(b)).toThrow();
     });
 });

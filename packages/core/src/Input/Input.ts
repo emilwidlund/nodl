@@ -2,9 +2,9 @@ import { action, computed, makeObservable, observable } from 'mobx';
 import { BehaviorSubject } from 'rxjs';
 import { v4 as uuid } from 'uuid';
 
+import { IInputProps } from './Input.types';
 import { Connection } from '../Connection/Connection';
 import { Schema } from '../Schema/Schema.types';
-import { IInputProps } from './Input.types';
 
 export class Input<TValue = any> extends BehaviorSubject<TValue> {
     /** Identifier */
