@@ -36,6 +36,7 @@ export class Connection<T> extends Subject<T> {
                 this.to.type.validator.parse(value);
                 this.to.next(value);
             } catch (err) {
+                this.dispose();
                 throw new Error('Received a value with an incompatible type');
             }
         });
