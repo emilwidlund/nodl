@@ -1,10 +1,10 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 import { v4 as uuid } from 'uuid';
 
+import { NodeData } from './Node.types';
 import { Connection } from '../Connection/Connection';
 import { Input } from '../Input/Input';
 import { Output } from '../Output/Output';
-import { NodeData } from './Node.types';
 
 export abstract class Node<TData extends NodeData = NodeData> {
     /** Identifier */

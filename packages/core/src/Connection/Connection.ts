@@ -25,6 +25,8 @@ export class Connection<T> extends Subject<T> {
 
         this.from = from;
         this.to = to;
+        this.from.connections.push(this);
+        this.to.connection = this;
 
         this.subscription = this.from.subscribe(value => {
             try {
@@ -35,9 +37,6 @@ export class Connection<T> extends Subject<T> {
                 throw new Error('Received a value with an incompatible type');
             }
         });
-
-        this.from.connections.push(this);
-        this.to.connection = this;
 
         makeObservable(this, {
             id: observable,
