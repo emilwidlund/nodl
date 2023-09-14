@@ -50,7 +50,7 @@ export class Connection<T> extends Subject<T> {
     /** Disposes the Connection */
     public dispose() {
         this.unsubscribe();
-        this.subscription.unsubscribe();
+        this.subscription?.unsubscribe();
 
         this.from.connections = this.from.connections.filter(connection => connection !== this);
         this.to.connection = null;
