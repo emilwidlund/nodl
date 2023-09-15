@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { Input, Output } from '@nodl/core';
+import { Connection, Input, Output } from '@nodl/core';
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
@@ -19,7 +19,7 @@ export const Port = observer(<T,>({ port, isOutput }: PortProps<T>) => {
     const tooltipPosition = React.useMemo(() => (isOutput ? TooltipPosition.RIGHT : TooltipPosition.LEFT), [isOutput]);
     const visuallyDisabled = React.useMemo(() => {
         const isOccupied = !isOutput && port.connected;
-        const hasDifferentValueType = store.draftConnectionSource?.type !== port.type;
+        const hasDifferentValueType = store.draftConnectionSource && port instanceof Input ? !Connection.isTypeCompatible(store.draftConnectionSource, port) : true;
         const hasSharedNode = store.draftConnectionSource
             ? store.getNodeByPortId(store.draftConnectionSource.id) === store.getNodeByPortId(port.id)
             : false;
