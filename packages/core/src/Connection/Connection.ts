@@ -1,7 +1,6 @@
 import { action, makeObservable, observable } from 'mobx';
-import { Subject, Subscription, combineLatest, lastValueFrom, map } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { v4 as uuid } from 'uuid';
-import { ZodType, ZodUnion } from 'zod';
 
 import { Input } from '../Input/Input';
 import { Output } from '../Output/Output';
@@ -18,14 +17,7 @@ export class Connection<T> extends Subject<T> {
 
     /** Determines type compatibility */
     public static isTypeCompatible<TFrom, TTo>(from: Output<TFrom>, to: Input<TTo>) {
-        if (to.type.validator instanceof ZodUnion) {
-            const types = to.type.validator._def.options as ZodType[];
-            const hasCompatibleType = types.some(type => type.constructor === from.type.validator.constructor);
-
-            return hasCompatibleType;
-        } else {
-            return from.type.validator.constructor === to.type.validator.constructor;
-        }
+        return from.type.name === to.type.name;
     }
 
     constructor(from: Output<T>, to: Input<T>) {

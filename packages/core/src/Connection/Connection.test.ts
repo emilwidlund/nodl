@@ -1,10 +1,4 @@
-import { z } from 'zod';
 import { Addition } from '../Node/Node.fixture';
-import { schema } from '../Schema/Schema';
-import { Input } from '../Input/Input';
-import { Output } from '../Output/Output';
-import { of } from 'rxjs';
-import { Connection } from './Connection';
 
 describe('Connection', () => {
     it('should transfer values', () => {
@@ -57,47 +51,5 @@ describe('Connection', () => {
 
         expect(() => node2.outputs.output.connect(node3.inputs.a)).not.toThrow();
         expect(spy).toBeCalled();
-    });
-
-    it('should figure out trivial type compability', () => {
-        const output = new Output({
-            type: schema('Number', z.number()),
-            observable: of(0)
-        })
-        
-        const input = new Input({
-            type: schema('Number or String', z.number()),
-            defaultValue: ''
-        })
-
-        expect(Connection.isTypeCompatible(output, input)).toBeTruthy();
-    });
-
-    it('should figure out union type compability', () => {
-        const output = new Output({
-            type: schema('Number', z.number()),
-            observable: of(0)
-        })
-        
-        const input = new Input({
-            type: schema('Number or String', z.union([z.number(), z.string()])),
-            defaultValue: ''
-        })
-
-        expect(Connection.isTypeCompatible(output, input)).toBeTruthy();
-    });
-
-    it('should throw when types arent compatible', () => {
-        const output = new Output({
-            type: schema('Number', z.number()),
-            observable: of(0)
-        })
-        
-        const input = new Input({
-            type: schema('Number or String', z.union([z.object({}), z.string()])),
-            defaultValue: ''
-        })
-
-        expect(Connection.isTypeCompatible(output, input)).toBeFalsy();
     });
 });
